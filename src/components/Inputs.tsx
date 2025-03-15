@@ -69,6 +69,11 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     },
   ]);
 
+  const [newNumberIndex, setNewNumberIndex] = useState(7);
+
+  console.log(numbersList);
+  console.log(calculationResults);
+
   const [resultMessage, setResultMessage] = useState("");
 
   let calculationNumber: number = 0;
@@ -114,19 +119,29 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
           result: calculationNumber,
         },
       ]);
+
       numbersLeft(
-        numbersList.filter(
-          (entry) =>
-            entry.id !== selectedNumber.id &&
-            entry.id !== secondSelectedNumber.id
+        (previousList: [{ id: number; number: number }]) => (
+          previousList.filter(
+            (entry) =>
+              entry.id !== selectedNumber.id &&
+              entry.id !== secondSelectedNumber.id
+          ),
+          [
+            ...previousList,
+            { id: newNumberIndex, number: calculationNumber },
+          ].sort(function (a, b) {
+            return a.number - b.number;
+          })
         )
       );
+
+      setNewNumberIndex(newNumberIndex + 1);
     }
     return calculationNumber;
   }
 
   // id: calculationResults[calculationResults.length - 1].id + 1
-  // `${selectedNumber.number} ${selectedSymbol} ${secondSelectedNumber.number} = ${calculationNumber}`
 
   function handleCalculation() {
     calculation(selectedSymbol);
@@ -166,13 +181,16 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     number1: number,
     number1Id: number,
     number2: number,
-    number2Id: number
+    number2Id: number,
+    result: number
   ) {
     setCalculationResults(
       calculationResults.filter((entry) => entry !== calculationResults[i])
     );
 
     numbersLeft(
+      (previousList: [{ id: number; number: number }]) =>
+        previousList.filter((entry) => entry.number !== result),
       [
         ...numbersList,
         { id: number1Id, number: number1 },
@@ -210,27 +228,32 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
       <button onClick={handleCalculation}>=</button>
       {resultMessage !== "" && <div>{resultMessage}</div>}
 
-      {calculationResults.map((calculation, index) => (
-        <div key={index}>
-          <div>
-            {calculation.number1} {calculation.symbol} {calculation.number2} ={" "}
-            {calculation.result}
+      {calculationResults.map((calculation, index) =>
+        index != 0 ? (
+          <div key={index}>
+            <div>
+              {calculation.number1} {calculation.symbol} {calculation.number2} ={" "}
+              {calculation.result}
+            </div>
+            <button
+              onClick={() =>
+                handleDelete(
+                  index,
+                  calculation.number1,
+                  calculation.number1Id,
+                  calculation.number2,
+                  calculation.number2Id,
+                  calculation.result
+                )
+              }
+            >
+              x
+            </button>
           </div>
-          <button
-            onClick={() =>
-              handleDelete(
-                index,
-                calculation.number1,
-                calculation.number1Id,
-                calculation.number2,
-                calculation.number2Id
-              )
-            }
-          >
-            x
-          </button>
-        </div>
-      ))}
+        ) : (
+          ""
+        )
+      )}
     </>
   );
 }
