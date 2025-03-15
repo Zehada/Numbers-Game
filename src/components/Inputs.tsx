@@ -120,20 +120,17 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
         },
       ]);
 
-      numbersLeft(
-        (previousList: [{ id: number; number: number }]) => (
-          previousList.filter(
+      numbersLeft((previousList: { id: number; number: number }[]) =>
+        [
+          ...previousList.filter(
             (entry) =>
               entry.id !== selectedNumber.id &&
               entry.id !== secondSelectedNumber.id
           ),
-          [
-            ...previousList,
-            { id: newNumberIndex, number: calculationNumber },
-          ].sort(function (a, b) {
-            return a.number - b.number;
-          })
-        )
+          { id: newNumberIndex, number: calculationNumber },
+        ].sort(function (a, b) {
+          return a.number - b.number;
+        })
       );
 
       setNewNumberIndex(newNumberIndex + 1);
@@ -188,11 +185,9 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
       calculationResults.filter((entry) => entry !== calculationResults[i])
     );
 
-    numbersLeft(
-      (previousList: [{ id: number; number: number }]) =>
-        previousList.filter((entry) => entry.number !== result),
+    numbersLeft((previousList: { id: number; number: number }[]) =>
       [
-        ...numbersList,
+        ...previousList.filter((entry) => entry.number !== result),
         { id: number1Id, number: number1 },
         { id: number2Id, number: number2 },
       ].sort(function (a, b) {
