@@ -168,7 +168,8 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     }
   }
 
-  console.log(numbersList);
+  console.log(calculationResults);
+  console.log(secondSelectedNumber);
 
   function handleDelete(
     i: number,
@@ -179,11 +180,34 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     result: number,
     resultId: number
   ) {
-    // calculationResults.map((calculation) =>
-    // if (calculation.result === ))
-    setCalculationResults(
-      calculationResults.filter((entry) => entry !== calculationResults[i])
-    );
+    calculationResults.map((calculation) => {
+      if (
+        resultId === calculation.number1Id ||
+        resultId === calculation.number2Id
+      ) {
+        setCalculationResults((previousResults) =>
+          previousResults.filter((entry) => entry !== calculation)
+        );
+
+        numbersLeft((previousList: { id: number; number: number }[]) =>
+          previousList.filter((entry) => entry.id !== calculation.resultId)
+        );
+
+        if (resultId === calculation.number1Id) {
+          console.log("hello");
+          numbersLeft((previousList: { id: number; number: number }[]) => [
+            ...previousList,
+            { id: calculation.number2Id, number: calculation.number2 },
+          ]);
+        } else if (resultId === calculation.number2Id) {
+          numbersLeft((previousList: { id: number; number: number }[]) => [
+            ...previousList,
+            ,
+            { id: calculation.number1Id, number: calculation.number1 },
+          ]);
+        }
+      }
+    });
 
     numbersLeft((previousList: { id: number; number: number }[]) =>
       [
@@ -193,6 +217,10 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
       ].sort(function (a, b) {
         return a.number - b.number;
       })
+    );
+
+    setCalculationResults((previousResults) =>
+      previousResults.filter((entry) => entry !== calculationResults[i])
     );
   }
 
