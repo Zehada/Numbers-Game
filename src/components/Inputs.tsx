@@ -13,15 +13,48 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     id: 0,
     number: 0,
   });
-
   const selectedNumberAsNumber = selectedNumber.number;
 
   const [secondSelectedNumber, setSecondSelectedNumber] = useState({
     id: 0,
     number: 0,
   });
-
   const secondSelectedNumberAsNumber = secondSelectedNumber.number;
+
+  const [selectedSymbol, setSelectedSymbol] = useState("+");
+
+  const [calculationResults, setCalculationResults] = useState([
+    {
+      number1: 0,
+      number1Id: 0,
+      symbol: "",
+      number2: 0,
+      number2Id: 0,
+      result: 0,
+      resultId: 0,
+    },
+  ]);
+
+  const [newNumberIndex, setNewNumberIndex] = useState(7);
+
+  const [resultMessage, setResultMessage] = useState("");
+
+  useEffect(() => {
+    setListOption(numbersList);
+    setListOption2(numbersList);
+  }, [numbersList]);
+
+  useEffect(() => {
+    setSelectedNumber({
+      id: 0,
+      number: 0,
+    });
+
+    setSecondSelectedNumber({
+      id: 0,
+      number: 0,
+    });
+  }, [calculationResults]);
 
   function handleChangingNumber(
     e: React.ChangeEvent<HTMLSelectElement>,
@@ -55,26 +88,6 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
       }
     }
   }
-
-  const [selectedSymbol, setSelectedSymbol] = useState("+");
-
-  const [calculationResults, setCalculationResults] = useState([
-    {
-      number1: 0,
-      number1Id: 0,
-      symbol: "",
-      number2: 0,
-      number2Id: 0,
-      result: 0,
-    },
-  ]);
-
-  const [newNumberIndex, setNewNumberIndex] = useState(7);
-
-  console.log(numbersList);
-  console.log(calculationResults);
-
-  const [resultMessage, setResultMessage] = useState("");
 
   let calculationNumber: number = 0;
 
@@ -117,6 +130,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
           number2: secondSelectedNumberAsNumber,
           number2Id: secondSelectedNumber.id,
           result: calculationNumber,
+          resultId: newNumberIndex,
         },
       ]);
 
@@ -138,8 +152,6 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     return calculationNumber;
   }
 
-  // id: calculationResults[calculationResults.length - 1].id + 1
-
   function handleCalculation() {
     calculation(selectedSymbol);
 
@@ -156,22 +168,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     }
   }
 
-  useEffect(() => {
-    setListOption(numbersList);
-    setListOption2(numbersList);
-  }, [numbersList]);
-
-  useEffect(() => {
-    setSelectedNumber({
-      id: 0,
-      number: 0,
-    });
-
-    setSecondSelectedNumber({
-      id: 0,
-      number: 0,
-    });
-  }, [calculationResults]);
+  console.log(numbersList);
 
   function handleDelete(
     i: number,
@@ -179,15 +176,18 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     number1Id: number,
     number2: number,
     number2Id: number,
-    result: number
+    result: number,
+    resultId: number
   ) {
+    // calculationResults.map((calculation) =>
+    // if (calculation.result === ))
     setCalculationResults(
       calculationResults.filter((entry) => entry !== calculationResults[i])
     );
 
     numbersLeft((previousList: { id: number; number: number }[]) =>
       [
-        ...previousList.filter((entry) => entry.number !== result),
+        ...previousList.filter((entry) => entry.id !== resultId),
         { id: number1Id, number: number1 },
         { id: number2Id, number: number2 },
       ].sort(function (a, b) {
@@ -238,7 +238,8 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
                   calculation.number1Id,
                   calculation.number2,
                   calculation.number2Id,
-                  calculation.result
+                  calculation.result,
+                  calculation.resultId
                 )
               }
             >

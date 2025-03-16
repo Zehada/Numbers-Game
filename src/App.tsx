@@ -3,7 +3,7 @@ import "./App.css";
 import Inputs from "./components/Inputs";
 
 function App() {
-  const numbers = [6, 45, 2, 45, 63, 10];
+  const numbers = [6, 45, 2, 6, 63, 10];
   const [numbersList, setNumbersList] = useState<
     { id: number; number: number }[]
   >(
