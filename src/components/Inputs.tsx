@@ -169,7 +169,6 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
   }
 
   console.log(calculationResults);
-  console.log(secondSelectedNumber);
 
   function handleDelete(
     i: number,
@@ -177,10 +176,9 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     number1Id: number,
     number2: number,
     number2Id: number,
-    result: number,
     resultId: number
   ) {
-    calculationResults.map((calculation) => {
+    calculationResults.map((calculation, index) => {
       if (
         resultId === calculation.number1Id ||
         resultId === calculation.number2Id
@@ -189,25 +187,30 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
           previousResults.filter((entry) => entry !== calculation)
         );
 
-        numbersLeft((previousList: { id: number; number: number }[]) =>
-          previousList.filter((entry) => entry.id !== calculation.resultId)
-        );
+        document.getElementById("deleteBtn" + index)!.click();
 
-        if (resultId === calculation.number1Id) {
-          console.log("hello");
-          numbersLeft((previousList: { id: number; number: number }[]) => [
-            ...previousList,
-            { id: calculation.number2Id, number: calculation.number2 },
-          ]);
-        } else if (resultId === calculation.number2Id) {
-          numbersLeft((previousList: { id: number; number: number }[]) => [
-            ...previousList,
-            ,
-            { id: calculation.number1Id, number: calculation.number1 },
-          ]);
-        }
+        // numbersLeft((previousList: { id: number; number: number }[]) =>
+        //   previousList.filter((entry) => entry.id !== calculation.resultId)
+        // );
+
+        // if (resultId === calculation.number1Id) {
+        //   numbersLeft((previousList: { id: number; number: number }[]) => [
+        //     ...previousList,
+        //     { id: calculation.number2Id, number: calculation.number2 },
+        //   ]);
+        // } else if (resultId === calculation.number2Id) {
+        //   numbersLeft((previousList: { id: number; number: number }[]) => [
+        //     ...previousList,
+        //     ,
+        //     { id: calculation.number1Id, number: calculation.number1 },
+        //   ]);
+        // }
       }
     });
+
+    setCalculationResults((previousResults) =>
+      previousResults.filter((entry) => entry !== calculationResults[i])
+    );
 
     numbersLeft((previousList: { id: number; number: number }[]) =>
       [
@@ -217,10 +220,6 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
       ].sort(function (a, b) {
         return a.number - b.number;
       })
-    );
-
-    setCalculationResults((previousResults) =>
-      previousResults.filter((entry) => entry !== calculationResults[i])
     );
   }
 
@@ -259,6 +258,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
               {calculation.result}
             </div>
             <button
+              id={"deleteBtn" + index}
               onClick={() =>
                 handleDelete(
                   index,
@@ -266,7 +266,6 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
                   calculation.number1Id,
                   calculation.number2,
                   calculation.number2Id,
-                  calculation.result,
                   calculation.resultId
                 )
               }
