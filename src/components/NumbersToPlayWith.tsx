@@ -2,9 +2,10 @@ import { useEffect } from "react";
 
 type NumbersToPlayWithProps = {
   randomNumbers: any;
+  numbers: number[];
 };
 
-function NumbersToPlayWith({ randomNumbers }: NumbersToPlayWithProps) {
+function NumbersToPlayWith({ randomNumbers, numbers }: NumbersToPlayWithProps) {
   let listOfNumber = [
     1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 25, 50, 75,
     100,
@@ -23,7 +24,13 @@ function NumbersToPlayWith({ randomNumbers }: NumbersToPlayWithProps) {
     randomNumbers(selectedNumbers);
   }, []);
 
-  return <div>hi</div>;
+  return (
+    <>
+      {numbers.map((number, index) => (
+        <div key={index}>{number}</div>
+      ))}
+    </>
+  );
 }
 
 export default NumbersToPlayWith;

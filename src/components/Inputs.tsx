@@ -168,8 +168,6 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     }
   }
 
-  console.log(calculationResults);
-
   function handleDelete(
     i: number,
     number1: number,

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import Inputs from "./components/Inputs";
-import NumberToPlayWith from "./components/NumberToPlayWith";
+import NumbersToPlayWith from "./components/NumbersToPlayWith";
+import NumberToGuess from "./components/NumberToGuess";
 
 function App() {
   // const numbers = [6, 45, 2, 6, 63, 10];
@@ -36,13 +37,12 @@ function App() {
   function handleNumbersLeft(data: { id: number; number: number }[]) {
     setNumbersList(data);
   }
-
-  console.log(numbers);
-
+  console.log("hello");
   return (
     <>
+      <NumbersToPlayWith randomNumbers={handleNumbers} numbers={numbers} />
       <Inputs numbersList={numbersList} numbersLeft={handleNumbersLeft} />
-      <NumberToPlayWith randomNumbers={handleNumbers} />
+      <NumberToGuess />
     </>
   );
 }
