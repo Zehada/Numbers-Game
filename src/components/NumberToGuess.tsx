@@ -1,16 +1,22 @@
-type NumbersToPlayWithProps = {
-  randomNumbers: any;
-  numbers: number[];
+import { useEffect } from "react";
+
+type NumberToGuessProps = {
+  handleNumberToGuess: any;
+  numberToGuess: number;
 };
 
-function NumberToGuess() {
+function NumberToGuess({
+  handleNumberToGuess,
+  numberToGuess,
+}: NumberToGuessProps) {
   function randomIntFromInterval(min: number, max: number) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  const numberToGuess = randomIntFromInterval(101, 999);
-  console.log(numberToGuess);
+  useEffect(() => {
+    handleNumberToGuess(randomIntFromInterval(101, 999));
+  }, []);
 
   return (
     <>
