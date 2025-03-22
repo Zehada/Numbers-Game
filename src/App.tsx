@@ -4,6 +4,7 @@ import Inputs from "./components/Inputs";
 import NumbersToPlayWith from "./components/NumbersToPlayWith";
 import NumberToGuess from "./components/NumberToGuess";
 import EndMessage from "./components/EndMessage";
+import WinCalculation from "./components/WinCalculation";
 
 function App() {
   // const numbers = [6, 45, 2, 6, 63, 10];
@@ -55,6 +56,8 @@ function App() {
         handleNumberToGuess={handleNumberToGuess}
         numberToGuess={numberToGuess}
       />
+
+      <WinCalculation numbers={numbers} />
 
       <EndMessage numbersList={numbersList} numberToGuess={numberToGuess} />
     </>
