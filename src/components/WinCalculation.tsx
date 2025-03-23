@@ -1,12 +1,31 @@
-import { useEffect } from "react";
-
 type WinCalculationProps = {
   numbers: number[];
 };
 
 function WinCalculation({ numbers }: WinCalculationProps) {
   let calculationNumbers = [...numbers];
-  let results = [
+
+  type Results = [
+    {
+      [key: string]: number | string;
+      firstNumber: number;
+      secondNumber: number;
+      result: number;
+      thirdNumber: number;
+      fourthNumber: number;
+      secondResult: number;
+      fifthNumber: number;
+      sixthNumber: number;
+      thirdResult: number;
+      message: string;
+    }
+  ];
+
+  // interface Results {
+  //   [key: string]: number | string; // Allow dynamic keys with number values
+  // }
+
+  let results: Results = [
     {
       firstNumber: 0,
       secondNumber: 0,
@@ -134,28 +153,35 @@ function WinCalculation({ numbers }: WinCalculationProps) {
 
   calculation("", 1, 0, 0, 0);
 
-  for (let resultIndex in results) {
-    calculationNumbers.splice(
-      calculationNumbers.indexOf(results[resultIndex]["firstNumber"]),
-      1
-    );
-    calculationNumbers.splice(
-      calculationNumbers.indexOf(results[resultIndex]["secondNumber"]),
-      1
-    );
-    calculationNumbers.push(results[resultIndex]["result"]);
-    calculation(
-      results[resultIndex]["message"],
-      2,
-      results[resultIndex]["firstNumber"],
-      results[resultIndex]["secondNumber"],
-      results[resultIndex]["result"]
-    );
+  function nextRoundCalculation(
+    round: number,
+    number1: string,
+    number2: string
+  ) {
+    for (let resultIndex in results) {
+      // let resultIndex = results.indexOf(result);
+
+      calculationNumbers.splice(
+        calculationNumbers.indexOf(results[resultIndex][number1] as number),
+        1
+      );
+      calculationNumbers.splice(
+        calculationNumbers.indexOf(results[resultIndex][number2] as number),
+        1
+      );
+      calculationNumbers.push(results[resultIndex]["result"]);
+      calculation(
+        results[resultIndex]["message"],
+        round,
+        results[resultIndex]["firstNumber"],
+        results[resultIndex]["secondNumber"],
+        results[resultIndex]["result"]
+      );
+    }
   }
 
-  console.log(numbers);
+  nextRoundCalculation(1, "firstNumber", "secondNumber");
   console.log(results);
-  console.log(calculationNumbers);
 
   return <></>;
 }
