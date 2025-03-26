@@ -86,9 +86,9 @@ function WinCalculation({ numbers }: WinCalculationProps) {
   ) {
     for (let i = 1; i <= calculationNumbers.length; i++) {
       for (let j = 1; j <= calculationNumbers.length - 1; j++) {
-        if (round === 4) {
-          console.log(calculationNumbers.length);
-        }
+        // if (round === 5) {
+        //   console.log(calculationNumbers.length);
+        // }
         subtractionResult =
           calculationNumbers[0]["number"] - calculationNumbers[j]["number"];
         divisionResult =
@@ -248,7 +248,7 @@ function WinCalculation({ numbers }: WinCalculationProps) {
 
           message:
             previousMessage +
-            `, ${calculationNumbers[0]} x ${calculationNumbers[i]} = ${multiplicationResult}`,
+            `, ${calculationNumbers[0]["number"]} x ${calculationNumbers[i]["number"]} = ${multiplicationResult}`,
         });
       }
     }
@@ -472,106 +472,161 @@ function WinCalculation({ numbers }: WinCalculationProps) {
           { id: 0, number: 0 },
           { id: 0, number: 0 }
         );
+      } else if (
+        results[resultIndex]["seventhNumber"]["number"] !== 0 &&
+        results[resultIndex]["eighthNumber"]["number"] !== 0 &&
+        round === 5
+      ) {
+        calculationNumbers.splice(
+          calculationNumbers.indexOf(results[resultIndex]["firstNumber"]),
+          1
+        );
+        calculationNumbers.splice(
+          calculationNumbers.indexOf(results[resultIndex]["secondNumber"]),
+          1
+        );
+
+        if (
+          results[resultIndex]["thirdNumber"] !== results[resultIndex]["result"]
+        ) {
+          calculationNumbers.splice(
+            calculationNumbers.indexOf(results[resultIndex]["thirdNumber"]),
+            1
+          );
+        }
+        if (
+          results[resultIndex]["fourthNumber"] !==
+          results[resultIndex]["result"]
+        ) {
+          calculationNumbers.splice(
+            calculationNumbers.indexOf(results[resultIndex]["fourthNumber"]),
+            1
+          );
+        }
+
+        if (
+          results[resultIndex]["fifthNumber"] !==
+            results[resultIndex]["secondResult"] &&
+          results[resultIndex]["fifthNumber"] !== results[resultIndex]["result"]
+        ) {
+          calculationNumbers.splice(
+            calculationNumbers.indexOf(
+              results[resultIndex]["fifthNumber"] as {
+                id: number;
+                number: number;
+              }
+            ),
+            1
+          );
+        }
+        if (
+          results[resultIndex]["sixthNumber"] !==
+            results[resultIndex]["secondResult"] &&
+          results[resultIndex]["sixthNumber"] !== results[resultIndex]["result"]
+        ) {
+          calculationNumbers.splice(
+            calculationNumbers.indexOf(
+              results[resultIndex]["sixthNumber"] as {
+                id: number;
+                number: number;
+              }
+            ),
+            1
+          );
+        }
+
+        if (
+          results[resultIndex][number1] !==
+            results[resultIndex]["thirdResult"] &&
+          results[resultIndex][number1] !==
+            results[resultIndex]["secondResult"] &&
+          results[resultIndex][number1] !== results[resultIndex]["result"]
+        ) {
+          calculationNumbers.splice(
+            calculationNumbers.indexOf(
+              results[resultIndex][number1] as { id: number; number: number }
+            ),
+            1
+          );
+        }
+        if (
+          results[resultIndex][number2] !==
+            results[resultIndex]["thirdResult"] &&
+          results[resultIndex][number2] !==
+            results[resultIndex]["secondResult"] &&
+          results[resultIndex][number2] !== results[resultIndex]["result"]
+        ) {
+          calculationNumbers.splice(
+            calculationNumbers.indexOf(
+              results[resultIndex][number2] as { id: number; number: number }
+            ),
+            1
+          );
+        }
+
+        if (
+          results[resultIndex]["thirdNumber"] !==
+            results[resultIndex]["result"] &&
+          results[resultIndex]["fourthNumber"] !==
+            results[resultIndex]["result"] &&
+          results[resultIndex]["fifthNumber"] !==
+            results[resultIndex]["result"] &&
+          results[resultIndex]["sixthNumber"] !==
+            results[resultIndex]["result"] &&
+          results[resultIndex][number1] !== results[resultIndex]["result"] &&
+          results[resultIndex][number2] !== results[resultIndex]["result"]
+        ) {
+          calculationNumbers.push(results[resultIndex]["result"]);
+        }
+
+        if (
+          results[resultIndex]["fifthNumber"] !==
+            results[resultIndex]["secondResult"] &&
+          results[resultIndex]["sixthNumber"] !==
+            results[resultIndex]["secondResult"] &&
+          results[resultIndex][number1] !==
+            results[resultIndex]["secondResult"] &&
+          results[resultIndex][number2] !== results[resultIndex]["secondResult"]
+        ) {
+          calculationNumbers.push(results[resultIndex]["secondResult"]);
+        }
+
+        if (
+          results[resultIndex][number1] !==
+            results[resultIndex]["thirdResult"] &&
+          results[resultIndex][number2] !== results[resultIndex]["thirdResult"]
+        ) {
+          calculationNumbers.push(results[resultIndex]["thirdResult"]);
+        }
+
+        calculationNumbers.push(
+          results[resultIndex][result] as { id: number; number: number }
+        );
+
+        calculation(
+          results[resultIndex]["message"],
+          round,
+          results[resultIndex]["firstNumber"],
+          results[resultIndex]["secondNumber"],
+          results[resultIndex]["result"],
+          results[resultIndex]["thirdNumber"],
+          results[resultIndex]["fourthNumber"],
+          results[resultIndex]["secondResult"],
+          results[resultIndex]["fifthNumber"],
+          results[resultIndex]["sixthNumber"],
+          results[resultIndex]["thirdResult"],
+          results[resultIndex][number1] as { id: number; number: number },
+          results[resultIndex][number2] as { id: number; number: number },
+          results[resultIndex][result] as { id: number; number: number }
+        );
       }
-
-      // else if (
-      //   results[resultIndex]["seventhNumber"] !== 0 &&
-      //   results[resultIndex]["eighthNumber"] !== 0 &&
-      //   round === 5
-      // ) {
-      //   calculationNumbers.splice(
-      //     calculationNumbers.indexOf(results[resultIndex]["firstNumber"]),
-      //     1
-      //   );
-      //   calculationNumbers.splice(
-      //     calculationNumbers.indexOf(results[resultIndex]["secondNumber"]),
-      //     1
-      //   );
-
-      //   calculationNumbers.splice(
-      //     calculationNumbers.indexOf(results[resultIndex]["thirdNumber"]),
-      //     1
-      //   );
-      //   calculationNumbers.splice(
-      //     calculationNumbers.indexOf(results[resultIndex]["fourthNumber"]),
-      //     1
-      //   );
-
-      //   calculationNumbers.splice(
-      //     calculationNumbers.indexOf(results[resultIndex]["fifthNumber"]),
-      //     1
-      //   );
-      //   calculationNumbers.splice(
-      //     calculationNumbers.indexOf(results[resultIndex]["sixthNumber"]),
-      //     1
-      //   );
-
-      //   calculationNumbers.splice(
-      //     calculationNumbers.indexOf(results[resultIndex][number1] as number),
-      //     1
-      //   );
-      //   calculationNumbers.splice(
-      //     calculationNumbers.indexOf(results[resultIndex][number2] as number),
-      //     1
-      //   );
-
-      //   if (
-      //     results[resultIndex]["thirdNumber"] !==
-      //       results[resultIndex]["result"] &&
-      //     results[resultIndex]["fourthNumber"] !==
-      //       results[resultIndex]["result"] &&
-      //     results[resultIndex][number1] !== results[resultIndex]["result"] &&
-      //     results[resultIndex][number2] !== results[resultIndex]["result"]
-      //   ) {
-      //     calculationNumbers.push(results[resultIndex]["result"]);
-      //   }
-
-      //   if (
-      //     results[resultIndex]["fifthNumber"] !==
-      //       results[resultIndex]["secondResult"] &&
-      //     results[resultIndex]["sixthNumber"] !==
-      //       results[resultIndex]["secondResult"] &&
-      //     results[resultIndex][number1] !==
-      //       results[resultIndex]["secondResult"] &&
-      //     results[resultIndex][number2] !== results[resultIndex]["secondResult"]
-      //   ) {
-      //     calculationNumbers.push(results[resultIndex]["secondResult"]);
-      //   }
-
-      //   if (
-      //     results[resultIndex][number1] !==
-      //       results[resultIndex]["thirdResult"] &&
-      //     results[resultIndex][number2] !== results[resultIndex]["thirdResult"]
-      //   ) {
-      //     calculationNumbers.push(results[resultIndex]["thirdResult"]);
-      //   }
-
-      //   calculationNumbers.push(results[resultIndex][result] as number);
-
-      //   calculation(
-      //     results[resultIndex]["message"],
-      //     round,
-      //     results[resultIndex]["firstNumber"],
-      //     results[resultIndex]["secondNumber"],
-      //     results[resultIndex]["result"],
-      //     results[resultIndex]["thirdNumber"],
-      //     results[resultIndex]["fourthNumber"],
-      //     results[resultIndex]["secondResult"],
-      //     results[resultIndex]["fifthNumber"],
-      //     results[resultIndex]["sixthNumber"],
-      //     results[resultIndex]["thirdResult"],
-      //     results[resultIndex][number1] as number,
-      //     results[resultIndex][number2] as number,
-      //     results[resultIndex][result] as number
-      //   );
-      // }
     }
   }
 
   nextRoundCalculation(2, "firstNumber", "secondNumber", "result");
   nextRoundCalculation(3, "thirdNumber", "fourthNumber", "secondResult");
   nextRoundCalculation(4, "fifthNumber", "sixthNumber", "thirdResult");
-  // nextRoundCalculation(5, "seventhNumber", "eighthNumber", "fourthResult");
+  nextRoundCalculation(5, "seventhNumber", "eighthNumber", "fourthResult");
 
   console.log(results);
 
