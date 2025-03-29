@@ -57,7 +57,7 @@ function App() {
         numberToGuess={numberToGuess}
       />
 
-      <WinCalculation numbers={numbers} />
+      <WinCalculation numbers={numbers} numberToGuess={numberToGuess} />
 
       <EndMessage numbersList={numbersList} numberToGuess={numberToGuess} />
     </>
