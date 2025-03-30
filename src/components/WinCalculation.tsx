@@ -121,86 +121,70 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
         if (
           subtractionResult === numberToGuess &&
           subtractionResult !== calculationNumbers[0]["number"] &&
-          subtractionResult !== calculationNumbers[j]["number"]
+          subtractionResult !== calculationNumbers[j]["number"] &&
+          (calculationNumbers[0]["id"] === result["id"] ||
+            calculationNumbers[j]["id"] === result["id"] ||
+            thirdNumber["id"] === result["id"] ||
+            fourthNumber["id"] === result["id"] ||
+            fifthNumber["id"] === result["id"] ||
+            sixthNumber["id"] === result["id"] ||
+            seventhNumber["id"] === result["id"] ||
+            eighthNumber["id"] === result["id"] ||
+            calculationNumbers[0]["id"] === secondResult["id"] ||
+            calculationNumbers[j]["id"] === secondResult["id"] ||
+            fifthNumber["id"] === secondResult["id"] ||
+            sixthNumber["id"] === secondResult["id"] ||
+            seventhNumber["id"] === secondResult["id"] ||
+            eighthNumber["id"] === secondResult["id"] ||
+            calculationNumbers[0]["id"] === thirdResult["id"] ||
+            calculationNumbers[j]["id"] === thirdResult["id"] ||
+            seventhNumber["id"] === thirdResult["id"] ||
+            eighthNumber["id"] === thirdResult["id"] ||
+            calculationNumbers[0]["id"] === fourthResult["id"] ||
+            calculationNumbers[j]["id"] === fourthResult["id"])
         ) {
           winningCalculations.push({
             message: subtractionMessage,
             results: [
-              round !== 1 &&
-              (calculationNumbers[0]["id"] === result["id"] ||
-                calculationNumbers[j]["id"] === result["id"] ||
-                thirdNumber["id"] === result["id"] ||
-                fourthNumber["id"] === result["id"] ||
-                fifthNumber["id"] === result["id"] ||
-                sixthNumber["id"] === result["id"] ||
-                seventhNumber["id"] === result["id"] ||
-                eighthNumber["id"] === result["id"])
-                ? result["number"]
-                : 0,
-              round !== 2 &&
-              (calculationNumbers[0]["id"] === secondResult["id"] ||
-                calculationNumbers[j]["id"] === secondResult["id"] ||
-                fifthNumber["id"] === secondResult["id"] ||
-                sixthNumber["id"] === secondResult["id"] ||
-                seventhNumber["id"] === secondResult["id"] ||
-                eighthNumber["id"] === secondResult["id"])
-                ? secondResult["number"]
-                : 0,
-              round !== 3 &&
-              (calculationNumbers[0]["id"] === thirdResult["id"] ||
-                calculationNumbers[j]["id"] === thirdResult["id"] ||
-                seventhNumber["id"] === thirdResult["id"] ||
-                eighthNumber["id"] === thirdResult["id"])
-                ? thirdResult["number"]
-                : 0,
-              round !== 4 &&
-              (calculationNumbers[0]["id"] === fourthResult["id"] ||
-                calculationNumbers[j]["id"] === fourthResult["id"])
-                ? fourthResult["number"]
-                : 0,
+              round !== 1 ? result["number"] : 0,
+              round !== 2 ? secondResult["number"] : 0,
+              round !== 3 ? thirdResult["number"] : 0,
+              round !== 4 ? fourthResult["number"] : 0,
             ],
           });
         }
         if (
           divisionResult === numberToGuess &&
           divisionResult !== calculationNumbers[0]["number"] &&
-          divisionResult !== calculationNumbers[j]["number"]
+          divisionResult !== calculationNumbers[j]["number"] &&
+          (calculationNumbers[0]["id"] === result["id"] ||
+            calculationNumbers[j]["id"] === result["id"] ||
+            thirdNumber["id"] === result["id"] ||
+            fourthNumber["id"] === result["id"] ||
+            fifthNumber["id"] === result["id"] ||
+            sixthNumber["id"] === result["id"] ||
+            seventhNumber["id"] === result["id"] ||
+            eighthNumber["id"] === result["id"] ||
+            calculationNumbers[0]["id"] === secondResult["id"] ||
+            calculationNumbers[j]["id"] === secondResult["id"] ||
+            fifthNumber["id"] === secondResult["id"] ||
+            sixthNumber["id"] === secondResult["id"] ||
+            seventhNumber["id"] === secondResult["id"] ||
+            eighthNumber["id"] === secondResult["id"] ||
+            calculationNumbers[0]["id"] === thirdResult["id"] ||
+            calculationNumbers[j]["id"] === thirdResult["id"] ||
+            seventhNumber["id"] === thirdResult["id"] ||
+            eighthNumber["id"] === thirdResult["id"] ||
+            calculationNumbers[0]["id"] === fourthResult["id"] ||
+            calculationNumbers[j]["id"] === fourthResult["id"])
         ) {
           winningCalculations.push({
             message: divisionMessage,
             results: [
-              round !== 1 &&
-              (calculationNumbers[0]["id"] === result["id"] ||
-                calculationNumbers[j]["id"] === result["id"] ||
-                thirdNumber["id"] === result["id"] ||
-                fourthNumber["id"] === result["id"] ||
-                fifthNumber["id"] === result["id"] ||
-                sixthNumber["id"] === result["id"] ||
-                seventhNumber["id"] === result["id"] ||
-                eighthNumber["id"] === result["id"])
-                ? result["number"]
-                : 0,
-              round !== 2 &&
-              (calculationNumbers[0]["id"] === secondResult["id"] ||
-                calculationNumbers[j]["id"] === secondResult["id"] ||
-                fifthNumber["id"] === secondResult["id"] ||
-                sixthNumber["id"] === secondResult["id"] ||
-                seventhNumber["id"] === secondResult["id"] ||
-                eighthNumber["id"] === secondResult["id"])
-                ? secondResult["number"]
-                : 0,
-              round !== 3 &&
-              (calculationNumbers[0]["id"] === thirdResult["id"] ||
-                calculationNumbers[j]["id"] === thirdResult["id"] ||
-                seventhNumber["id"] === thirdResult["id"] ||
-                eighthNumber["id"] === thirdResult["id"])
-                ? thirdResult["number"]
-                : 0,
-              round !== 4 &&
-              (calculationNumbers[0]["id"] === fourthResult["id"] ||
-                calculationNumbers[j]["id"] === fourthResult["id"])
-                ? fourthResult["number"]
-                : 0,
+              round !== 1 ? result["number"] : 0,
+              round !== 2 ? secondResult["number"] : 0,
+              round !== 3 ? thirdResult["number"] : 0,
+              round !== 4 ? fourthResult["number"] : 0,
             ],
           });
         }
@@ -300,42 +284,36 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
         (previousMessage === "" ? "" : ", ") +
         `${calculationNumbers[0]["number"]} x ${calculationNumbers[i]["number"]} = ${multiplicationResult}`;
 
-      if (additionResult === numberToGuess) {
+      if (
+        additionResult === numberToGuess &&
+        (calculationNumbers[0]["id"] === result["id"] ||
+          calculationNumbers[i]["id"] === result["id"] ||
+          thirdNumber["id"] === result["id"] ||
+          fourthNumber["id"] === result["id"] ||
+          fifthNumber["id"] === result["id"] ||
+          sixthNumber["id"] === result["id"] ||
+          seventhNumber["id"] === result["id"] ||
+          eighthNumber["id"] === result["id"] ||
+          calculationNumbers[0]["id"] === secondResult["id"] ||
+          calculationNumbers[i]["id"] === secondResult["id"] ||
+          fifthNumber["id"] === secondResult["id"] ||
+          sixthNumber["id"] === secondResult["id"] ||
+          seventhNumber["id"] === secondResult["id"] ||
+          eighthNumber["id"] === secondResult["id"] ||
+          calculationNumbers[0]["id"] === thirdResult["id"] ||
+          calculationNumbers[i]["id"] === thirdResult["id"] ||
+          seventhNumber["id"] === thirdResult["id"] ||
+          eighthNumber["id"] === thirdResult["id"] ||
+          calculationNumbers[0]["id"] === fourthResult["id"] ||
+          calculationNumbers[i]["id"] === fourthResult["id"])
+      ) {
         winningCalculations.push({
           message: additionMessage,
           results: [
-            round !== 1 &&
-            (calculationNumbers[0]["id"] === result["id"] ||
-              calculationNumbers[i]["id"] === result["id"] ||
-              thirdNumber["id"] === result["id"] ||
-              fourthNumber["id"] === result["id"] ||
-              fifthNumber["id"] === result["id"] ||
-              sixthNumber["id"] === result["id"] ||
-              seventhNumber["id"] === result["id"] ||
-              eighthNumber["id"] === result["id"])
-              ? result["number"]
-              : 0,
-            round !== 2 &&
-            (calculationNumbers[0]["id"] === secondResult["id"] ||
-              calculationNumbers[i]["id"] === secondResult["id"] ||
-              fifthNumber["id"] === secondResult["id"] ||
-              sixthNumber["id"] === secondResult["id"] ||
-              seventhNumber["id"] === secondResult["id"] ||
-              eighthNumber["id"] === secondResult["id"])
-              ? secondResult["number"]
-              : 0,
-            round !== 3 &&
-            (calculationNumbers[0]["id"] === thirdResult["id"] ||
-              calculationNumbers[i]["id"] === thirdResult["id"] ||
-              seventhNumber["id"] === thirdResult["id"] ||
-              eighthNumber["id"] === thirdResult["id"])
-              ? thirdResult["number"]
-              : 0,
-            round !== 4 &&
-            (calculationNumbers[0]["id"] === fourthResult["id"] ||
-              calculationNumbers[i]["id"] === fourthResult["id"])
-              ? fourthResult["number"]
-              : 0,
+            round !== 1 ? result["number"] : 0,
+            round !== 2 ? secondResult["number"] : 0,
+            round !== 3 ? thirdResult["number"] : 0,
+            round !== 4 ? fourthResult["number"] : 0,
           ],
         });
       }
@@ -343,43 +321,35 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
       if (
         multiplicationResult === numberToGuess &&
         multiplicationResult !== calculationNumbers[0]["number"] &&
-        multiplicationResult !== calculationNumbers[i]["number"]
+        multiplicationResult !== calculationNumbers[i]["number"] &&
+        (calculationNumbers[0]["id"] === result["id"] ||
+          calculationNumbers[i]["id"] === result["id"] ||
+          thirdNumber["id"] === result["id"] ||
+          fourthNumber["id"] === result["id"] ||
+          fifthNumber["id"] === result["id"] ||
+          sixthNumber["id"] === result["id"] ||
+          seventhNumber["id"] === result["id"] ||
+          eighthNumber["id"] === result["id"] ||
+          calculationNumbers[0]["id"] === secondResult["id"] ||
+          calculationNumbers[i]["id"] === secondResult["id"] ||
+          fifthNumber["id"] === secondResult["id"] ||
+          sixthNumber["id"] === secondResult["id"] ||
+          seventhNumber["id"] === secondResult["id"] ||
+          eighthNumber["id"] === secondResult["id"] ||
+          calculationNumbers[0]["id"] === thirdResult["id"] ||
+          calculationNumbers[i]["id"] === thirdResult["id"] ||
+          seventhNumber["id"] === thirdResult["id"] ||
+          eighthNumber["id"] === thirdResult["id"] ||
+          calculationNumbers[0]["id"] === fourthResult["id"] ||
+          calculationNumbers[i]["id"] === fourthResult["id"])
       ) {
         winningCalculations.push({
           message: multiplicationMessage,
           results: [
-            round !== 1 &&
-            (calculationNumbers[0]["id"] === result["id"] ||
-              calculationNumbers[i]["id"] === result["id"] ||
-              thirdNumber["id"] === result["id"] ||
-              fourthNumber["id"] === result["id"] ||
-              fifthNumber["id"] === result["id"] ||
-              sixthNumber["id"] === result["id"] ||
-              seventhNumber["id"] === result["id"] ||
-              eighthNumber["id"] === result["id"])
-              ? result["number"]
-              : 0,
-            round !== 2 &&
-            (calculationNumbers[0]["id"] === secondResult["id"] ||
-              calculationNumbers[i]["id"] === secondResult["id"] ||
-              fifthNumber["id"] === secondResult["id"] ||
-              sixthNumber["id"] === secondResult["id"] ||
-              seventhNumber["id"] === secondResult["id"] ||
-              eighthNumber["id"] === secondResult["id"])
-              ? secondResult["number"]
-              : 0,
-            round !== 3 &&
-            (calculationNumbers[0]["id"] === thirdResult["id"] ||
-              calculationNumbers[i]["id"] === thirdResult["id"] ||
-              seventhNumber["id"] === thirdResult["id"] ||
-              eighthNumber["id"] === thirdResult["id"])
-              ? thirdResult["number"]
-              : 0,
-            round !== 4 &&
-            (calculationNumbers[0]["id"] === fourthResult["id"] ||
-              calculationNumbers[i]["id"] === fourthResult["id"])
-              ? fourthResult["number"]
-              : 0,
+            round !== 1 ? result["number"] : 0,
+            round !== 2 ? secondResult["number"] : 0,
+            round !== 3 ? thirdResult["number"] : 0,
+            round !== 4 ? fourthResult["number"] : 0,
           ],
         });
       }
@@ -488,7 +458,7 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           ),
           1
         );
-        // ****
+
         calculationNumbers.splice(
           calculationNumbers.indexOf(
             results[resultIndex][number2] as { id: number; number: number }
@@ -825,9 +795,6 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
   nextRoundCalculation(4, "fifthNumber", "sixthNumber", "thirdResult");
   nextRoundCalculation(5, "seventhNumber", "eighthNumber", "fourthResult");
 
-  // winningCalculations.sort(function (a: number[], b: number[]) {
-  //       return a - b;})
-
   for (let i = winningCalculations.length - 1; i >= 0; i--) {
     for (let j = winningCalculations[i]["results"].length - 1; j >= 0; j--) {
       if (winningCalculations[i]["results"][j] === 0) {
@@ -840,13 +807,25 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
     });
   }
 
-  winningCalculations.sort((a, b) =>
-    JSON.stringify(a["results"]) < JSON.stringify(b["results"])
-      ? 1
-      : JSON.stringify(a["results"]) > JSON.stringify(b["results"])
-      ? -1
-      : 0
-  );
+  winningCalculations.sort((a, b) => {
+    const minLength = Math.min(a.results.length, b.results.length);
+
+    for (let i = 0; i < minLength; i++) {
+      if (a.results[i] !== b.results[i]) {
+        return a.results[i] - b.results[i]; // Compare elements from left to right
+      }
+    }
+
+    return a.results.length - b.results.length; // Shorter arrays come first
+  });
+
+  // winningCalculations.sort((a, b) =>
+  //   JSON.stringify(a["results"]) < JSON.stringify(b["results"])
+  //     ? 1
+  //     : JSON.stringify(a["results"]) > JSON.stringify(b["results"])
+  //     ? -1
+  //     : 0
+  // );
 
   for (let i = winningCalculations.length - 1; i >= 0; i--) {
     let limit = winningCalculations[i]["results"].length - 1;
@@ -858,22 +837,20 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
       winningCalculations.splice(i + 1, 1);
     }
 
-    // if (winningCalculations[i]["results"]) {
-    //   for (let j = 0; j < winningCalculations[i]["results"].length; j++) {
-    //     if (
-    //       i < winningCalculations.length - 1 &&
-    //       winningCalculations[i]["results"].indexOf(
-    //         winningCalculations[i - 1]["results"][j]
-    //       ) !== -1
-    //     ) {
-    //       limit--;
-    //     }
+    for (let j = 0; j < winningCalculations[i]["results"].length; j++) {
+      if (
+        i < winningCalculations.length - 1 &&
+        winningCalculations[i]["results"].indexOf(
+          winningCalculations[i + 1]["results"][j]
+        ) !== -1
+      ) {
+        limit--;
+      }
 
-    //     if (limit === 0) {
-    //       winningCalculations.splice(i, 1);
-    //     }
-    //   }
-    // }
+      if (limit === 0) {
+        winningCalculations.splice(i + 1, 1);
+      }
+    }
   }
 
   console.log(results);
