@@ -129,18 +129,18 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
             fifthNumber["id"] === result["id"] ||
             sixthNumber["id"] === result["id"] ||
             seventhNumber["id"] === result["id"] ||
-            eighthNumber["id"] === result["id"] ||
-            calculationNumbers[0]["id"] === secondResult["id"] ||
+            eighthNumber["id"] === result["id"]) &&
+          (calculationNumbers[0]["id"] === secondResult["id"] ||
             calculationNumbers[j]["id"] === secondResult["id"] ||
             fifthNumber["id"] === secondResult["id"] ||
             sixthNumber["id"] === secondResult["id"] ||
             seventhNumber["id"] === secondResult["id"] ||
-            eighthNumber["id"] === secondResult["id"] ||
-            calculationNumbers[0]["id"] === thirdResult["id"] ||
+            eighthNumber["id"] === secondResult["id"]) &&
+          (calculationNumbers[0]["id"] === thirdResult["id"] ||
             calculationNumbers[j]["id"] === thirdResult["id"] ||
             seventhNumber["id"] === thirdResult["id"] ||
-            eighthNumber["id"] === thirdResult["id"] ||
-            calculationNumbers[0]["id"] === fourthResult["id"] ||
+            eighthNumber["id"] === thirdResult["id"]) &&
+          (calculationNumbers[0]["id"] === fourthResult["id"] ||
             calculationNumbers[j]["id"] === fourthResult["id"])
         ) {
           winningCalculations.push({
@@ -164,18 +164,18 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
             fifthNumber["id"] === result["id"] ||
             sixthNumber["id"] === result["id"] ||
             seventhNumber["id"] === result["id"] ||
-            eighthNumber["id"] === result["id"] ||
-            calculationNumbers[0]["id"] === secondResult["id"] ||
+            eighthNumber["id"] === result["id"]) &&
+          (calculationNumbers[0]["id"] === secondResult["id"] ||
             calculationNumbers[j]["id"] === secondResult["id"] ||
             fifthNumber["id"] === secondResult["id"] ||
             sixthNumber["id"] === secondResult["id"] ||
             seventhNumber["id"] === secondResult["id"] ||
-            eighthNumber["id"] === secondResult["id"] ||
-            calculationNumbers[0]["id"] === thirdResult["id"] ||
+            eighthNumber["id"] === secondResult["id"]) &&
+          (calculationNumbers[0]["id"] === thirdResult["id"] ||
             calculationNumbers[j]["id"] === thirdResult["id"] ||
             seventhNumber["id"] === thirdResult["id"] ||
-            eighthNumber["id"] === thirdResult["id"] ||
-            calculationNumbers[0]["id"] === fourthResult["id"] ||
+            eighthNumber["id"] === thirdResult["id"]) &&
+          (calculationNumbers[0]["id"] === fourthResult["id"] ||
             calculationNumbers[j]["id"] === fourthResult["id"])
         ) {
           winningCalculations.push({
@@ -293,18 +293,18 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           fifthNumber["id"] === result["id"] ||
           sixthNumber["id"] === result["id"] ||
           seventhNumber["id"] === result["id"] ||
-          eighthNumber["id"] === result["id"] ||
-          calculationNumbers[0]["id"] === secondResult["id"] ||
+          eighthNumber["id"] === result["id"]) &&
+        (calculationNumbers[0]["id"] === secondResult["id"] ||
           calculationNumbers[i]["id"] === secondResult["id"] ||
           fifthNumber["id"] === secondResult["id"] ||
           sixthNumber["id"] === secondResult["id"] ||
           seventhNumber["id"] === secondResult["id"] ||
-          eighthNumber["id"] === secondResult["id"] ||
-          calculationNumbers[0]["id"] === thirdResult["id"] ||
+          eighthNumber["id"] === secondResult["id"]) &&
+        (calculationNumbers[0]["id"] === thirdResult["id"] ||
           calculationNumbers[i]["id"] === thirdResult["id"] ||
           seventhNumber["id"] === thirdResult["id"] ||
-          eighthNumber["id"] === thirdResult["id"] ||
-          calculationNumbers[0]["id"] === fourthResult["id"] ||
+          eighthNumber["id"] === thirdResult["id"]) &&
+        (calculationNumbers[0]["id"] === fourthResult["id"] ||
           calculationNumbers[i]["id"] === fourthResult["id"])
       ) {
         winningCalculations.push({
@@ -329,18 +329,18 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           fifthNumber["id"] === result["id"] ||
           sixthNumber["id"] === result["id"] ||
           seventhNumber["id"] === result["id"] ||
-          eighthNumber["id"] === result["id"] ||
-          calculationNumbers[0]["id"] === secondResult["id"] ||
+          eighthNumber["id"] === result["id"]) &&
+        (calculationNumbers[0]["id"] === secondResult["id"] ||
           calculationNumbers[i]["id"] === secondResult["id"] ||
           fifthNumber["id"] === secondResult["id"] ||
           sixthNumber["id"] === secondResult["id"] ||
           seventhNumber["id"] === secondResult["id"] ||
-          eighthNumber["id"] === secondResult["id"] ||
-          calculationNumbers[0]["id"] === thirdResult["id"] ||
+          eighthNumber["id"] === secondResult["id"]) &&
+        (calculationNumbers[0]["id"] === thirdResult["id"] ||
           calculationNumbers[i]["id"] === thirdResult["id"] ||
           seventhNumber["id"] === thirdResult["id"] ||
-          eighthNumber["id"] === thirdResult["id"] ||
-          calculationNumbers[0]["id"] === fourthResult["id"] ||
+          eighthNumber["id"] === thirdResult["id"]) &&
+        (calculationNumbers[0]["id"] === fourthResult["id"] ||
           calculationNumbers[i]["id"] === fourthResult["id"])
       ) {
         winningCalculations.push({
@@ -819,14 +819,6 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
     return a.results.length - b.results.length; // Shorter arrays come first
   });
 
-  // winningCalculations.sort((a, b) =>
-  //   JSON.stringify(a["results"]) < JSON.stringify(b["results"])
-  //     ? 1
-  //     : JSON.stringify(a["results"]) > JSON.stringify(b["results"])
-  //     ? -1
-  //     : 0
-  // );
-
   for (let i = winningCalculations.length - 1; i >= 0; i--) {
     let limit = winningCalculations[i]["results"].length - 1;
     if (
@@ -837,23 +829,23 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
       winningCalculations.splice(i + 1, 1);
     }
 
-    for (let j = 0; j < winningCalculations[i]["results"].length; j++) {
-      if (
-        i < winningCalculations.length - 1 &&
-        winningCalculations[i]["results"].indexOf(
-          winningCalculations[i + 1]["results"][j]
-        ) !== -1
-      ) {
-        limit--;
-      }
+    // for (let j = 0; j < winningCalculations[i]["results"].length; j++) {
+    //   if (
+    //     i < winningCalculations.length - 1 &&
+    //     winningCalculations[i]["results"].indexOf(
+    //       winningCalculations[i + 1]["results"][j]
+    //     ) !== -1
+    //   ) {
+    //     limit--;
+    //   }
 
-      if (limit === 0) {
-        winningCalculations.splice(i + 1, 1);
-      }
-    }
+    //   if (limit === 0) {
+    //     winningCalculations.splice(i + 1, 1);
+    //   }
+    // }
   }
 
-  console.log(results);
+  // console.log(results);
   console.log(winningCalculations);
 
   return <></>;
