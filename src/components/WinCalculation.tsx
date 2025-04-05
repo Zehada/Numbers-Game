@@ -1,9 +1,17 @@
+import { useEffect, useState } from "react";
+
 type WinCalculationProps = {
   numbers: number[];
   numberToGuess: number;
 };
 
 function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
+  const [closestNumber, setClosestNumber] = useState(0);
+
+  useEffect(() => {
+    setClosestNumber(numberToGuess);
+  }, [numberToGuess]);
+
   let secondList: { id: number; number: number }[] = [{ id: 0, number: 0 }];
 
   for (let i = 1; i <= numbers.length; i++) {
@@ -14,12 +22,10 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
 
   let calculationNumbers: { id: number; number: number }[] = [...secondList];
 
-  type WinningCalculations = [
-    {
-      message: string;
-      results: number[];
-    }
-  ];
+  type WinningCalculations = {
+    message: string;
+    results: number[];
+  }[];
 
   let winningCalculations: WinningCalculations = [{ message: "", results: [] }];
 
@@ -94,16 +100,11 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
     thirdResult: { id: number; number: number },
     seventhNumber: { id: number; number: number },
     eighthNumber: { id: number; number: number },
-    fourthResult: { id: number; number: number }
-    // ninthNumber: number,
-    // tenthNumber: number,
-    // fifthResult: number,
+    fourthResult: { id: number; number: number },
+    closestNumber: number
   ) {
     for (let i = 1; i <= calculationNumbers.length; i++) {
       for (let j = 1; j <= calculationNumbers.length - 1; j++) {
-        // if (round === 5) {
-        //   console.log(calculationNumbers.length);
-        // }
         subtractionResult =
           calculationNumbers[0]["number"] - calculationNumbers[j]["number"];
         divisionResult =
@@ -119,7 +120,7 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           `${calculationNumbers[0]["number"]} / ${calculationNumbers[j]["number"]} = ${divisionResult}`;
 
         if (
-          subtractionResult === numberToGuess &&
+          subtractionResult === closestNumber &&
           subtractionResult !== calculationNumbers[0]["number"] &&
           subtractionResult !== calculationNumbers[j]["number"] &&
           (calculationNumbers[0]["id"] === result["id"] ||
@@ -154,7 +155,7 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           });
         }
         if (
-          divisionResult === numberToGuess &&
+          divisionResult === closestNumber &&
           divisionResult !== calculationNumbers[0]["number"] &&
           divisionResult !== calculationNumbers[j]["number"] &&
           (calculationNumbers[0]["id"] === result["id"] ||
@@ -285,7 +286,7 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
         `${calculationNumbers[0]["number"]} x ${calculationNumbers[i]["number"]} = ${multiplicationResult}`;
 
       if (
-        additionResult === numberToGuess &&
+        additionResult === closestNumber &&
         (calculationNumbers[0]["id"] === result["id"] ||
           calculationNumbers[i]["id"] === result["id"] ||
           thirdNumber["id"] === result["id"] ||
@@ -319,7 +320,7 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
       }
 
       if (
-        multiplicationResult === numberToGuess &&
+        multiplicationResult === closestNumber &&
         multiplicationResult !== calculationNumbers[0]["number"] &&
         multiplicationResult !== calculationNumbers[i]["number"] &&
         (calculationNumbers[0]["id"] === result["id"] ||
@@ -354,7 +355,6 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
         });
       }
 
-      // if (calculationNumbers[0] !== 0 && calculationNumbers[i] !== 0) {
       results.push({
         firstNumber: round === 1 ? calculationNumbers[0] : firstNumber,
         secondNumber: round === 1 ? calculationNumbers[i] : secondNumber,
@@ -380,7 +380,6 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
 
         message: additionMessage,
       });
-      // }
       if (
         multiplicationResult !== calculationNumbers[0]["number"] &&
         multiplicationResult !== calculationNumbers[i]["number"]
@@ -422,23 +421,6 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
 
     calculationNumbers = [...secondList];
   }
-
-  calculation(
-    "",
-    1,
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 },
-    { id: 0, number: 0 }
-  );
 
   function nextRoundCalculation(
     round: number,
@@ -484,7 +466,8 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           { id: 0, number: 0 },
           { id: 0, number: 0 },
           { id: 0, number: 0 },
-          { id: 0, number: 0 }
+          { id: 0, number: 0 },
+          closestNumber
         );
       } else if (
         results[resultIndex]["thirdNumber"]["number"] !== 0 &&
@@ -541,7 +524,8 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           { id: 0, number: 0 },
           { id: 0, number: 0 },
           { id: 0, number: 0 },
-          { id: 0, number: 0 }
+          { id: 0, number: 0 },
+          closestNumber
         );
       } else if (
         results[resultIndex]["fifthNumber"]["number"] !== 0 &&
@@ -637,7 +621,8 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           results[resultIndex][result] as { id: number; number: number },
           { id: 0, number: 0 },
           { id: 0, number: 0 },
-          { id: 0, number: 0 }
+          { id: 0, number: 0 },
+          closestNumber
         );
       } else if (
         results[resultIndex]["seventhNumber"]["number"] !== 0 &&
@@ -784,69 +769,151 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
           results[resultIndex]["thirdResult"],
           results[resultIndex][number1] as { id: number; number: number },
           results[resultIndex][number2] as { id: number; number: number },
-          results[resultIndex][result] as { id: number; number: number }
+          results[resultIndex][result] as { id: number; number: number },
+          closestNumber
         );
       }
     }
   }
 
-  nextRoundCalculation(2, "firstNumber", "secondNumber", "result");
-  nextRoundCalculation(3, "thirdNumber", "fourthNumber", "secondResult");
-  nextRoundCalculation(4, "fifthNumber", "sixthNumber", "thirdResult");
-  nextRoundCalculation(5, "seventhNumber", "eighthNumber", "fourthResult");
-
-  for (let i = winningCalculations.length - 1; i >= 0; i--) {
-    for (let j = winningCalculations[i]["results"].length - 1; j >= 0; j--) {
-      if (winningCalculations[i]["results"][j] === 0) {
-        winningCalculations[i]["results"].splice(j, 1);
+  function sortResults(
+    calculations: {
+      message: string;
+      results: number[];
+    }[]
+  ) {
+    for (let i = calculations.length - 1; i >= 0; i--) {
+      for (let j = calculations[i]["results"].length - 1; j >= 0; j--) {
+        if (calculations[i]["results"][j] === 0) {
+          calculations[i]["results"].splice(j, 1);
+        }
       }
+
+      calculations[i]["results"].sort(function (a, b) {
+        return a - b;
+      });
     }
 
-    winningCalculations[i]["results"].sort(function (a, b) {
-      return a - b;
+    calculations.sort((a, b) => {
+      const minLength = Math.min(a.results.length, b.results.length);
+
+      for (let i = 0; i < minLength; i++) {
+        if (a.results[i] !== b.results[i]) {
+          return a.results[i] - b.results[i]; // Compare elements from left to right
+        }
+      }
+
+      return a.results.length - b.results.length; // Shorter arrays come first
     });
-  }
 
-  winningCalculations.sort((a, b) => {
-    const minLength = Math.min(a.results.length, b.results.length);
-
-    for (let i = 0; i < minLength; i++) {
-      if (a.results[i] !== b.results[i]) {
-        return a.results[i] - b.results[i]; // Compare elements from left to right
+    for (let i = calculations.length - 1; i >= 0; i--) {
+      // let limit = winningCalculations[i]["results"].length - 1;
+      if (
+        i < calculations.length - 1 &&
+        JSON.stringify(calculations[i]["results"]) ===
+          JSON.stringify(calculations[i + 1]["results"])
+      ) {
+        calculations.splice(i + 1, 1);
       }
+
+      // for (let j = 0; j < calculations[i]["results"].length; j++) {
+      //   if (
+      //     i < calculations.length - 1 &&
+      //     calculations[i]["results"].indexOf(
+      //       calculations[i + 1]["results"][j]
+      //     ) !== -1
+      //   ) {
+      //     limit--;
+      //   }
+
+      //   if (limit === 0) {
+      //     calculations.splice(i + 1, 1);
+      //   }
+      // }
     }
-
-    return a.results.length - b.results.length; // Shorter arrays come first
-  });
-
-  for (let i = winningCalculations.length - 1; i >= 0; i--) {
-    let limit = winningCalculations[i]["results"].length - 1;
-    if (
-      i < winningCalculations.length - 1 &&
-      JSON.stringify(winningCalculations[i]["results"]) ===
-        JSON.stringify(winningCalculations[i + 1]["results"])
-    ) {
-      winningCalculations.splice(i + 1, 1);
-    }
-
-    // for (let j = 0; j < winningCalculations[i]["results"].length; j++) {
-    //   if (
-    //     i < winningCalculations.length - 1 &&
-    //     winningCalculations[i]["results"].indexOf(
-    //       winningCalculations[i + 1]["results"][j]
-    //     ) !== -1
-    //   ) {
-    //     limit--;
-    //   }
-
-    //   if (limit === 0) {
-    //     winningCalculations.splice(i + 1, 1);
-    //   }
-    // }
   }
 
-  // console.log(results);
-  console.log(winningCalculations);
+  const [remove, setRemove] = useState(0);
+  const [add, setAdd] = useState(0);
+
+  const [closestCalculations, setClosestCalculations] = useState<
+    { message: string; results: number[] }[]
+  >([{ message: "", results: [] }]);
+
+  useEffect(() => {
+    if (closestNumber === 0) return;
+    calculation(
+      "",
+      1,
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      { id: 0, number: 0 },
+      closestNumber
+    );
+
+    nextRoundCalculation(2, "firstNumber", "secondNumber", "result");
+    nextRoundCalculation(3, "thirdNumber", "fourthNumber", "secondResult");
+    nextRoundCalculation(4, "fifthNumber", "sixthNumber", "thirdResult");
+    nextRoundCalculation(5, "seventhNumber", "eighthNumber", "fourthResult");
+
+    sortResults(winningCalculations);
+
+    const newMin = numberToGuess - (remove + 1);
+    const newMax = numberToGuess + (add + 1);
+
+    if (winningCalculations.length === 1 && remove > add && newMax !== 999) {
+      setClosestNumber(newMax);
+      setAdd((prev) => prev + 1);
+      return;
+    }
+
+    if (winningCalculations.length === 1 && newMin !== 101) {
+      setClosestNumber(newMin);
+      setRemove((prev) => prev + 1);
+      return;
+    }
+
+    if (
+      winningCalculations.length > 1 &&
+      remove > 0 &&
+      add > 0 &&
+      remove === add
+    ) {
+      setClosestCalculations((prev) => [...prev, ...winningCalculations]);
+      console.log(closestCalculations);
+      console.log(winningCalculations);
+    } else if (
+      winningCalculations.length > 1 &&
+      remove > 0 &&
+      remove === add + 1
+    ) {
+      setClosestCalculations([...winningCalculations]);
+      if (newMax !== 999) {
+        setClosestNumber(newMax);
+        setAdd((prev) => prev + 1);
+      }
+    } else if (
+      winningCalculations.length > 1 &&
+      (remove > 0 || add > 0)
+
+      // && (remove < add || remove > add)
+    ) {
+      setClosestCalculations([...winningCalculations]);
+    }
+
+    console.log(winningCalculations);
+  }, [closestNumber]);
+
+  console.log(closestCalculations);
 
   return <></>;
 }
