@@ -840,6 +840,10 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
     { message: string; results: number[] }[]
   >([{ message: "", results: [] }]);
 
+  const [finalCalculations, setFinalCalculations] = useState<
+    { message: string; results: number[] }[]
+  >([{ message: "", results: [] }]);
+
   useEffect(() => {
     if (closestNumber === 0) return;
     calculation(
@@ -867,6 +871,8 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
 
     sortResults(winningCalculations);
 
+    setFinalCalculations(winningCalculations);
+
     const newMin = numberToGuess - (remove + 1);
     const newMax = numberToGuess + (add + 1);
 
@@ -889,8 +895,6 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
       remove === add
     ) {
       setClosestCalculations((prev) => [...prev, ...winningCalculations]);
-      console.log(closestCalculations);
-      console.log(winningCalculations);
     } else if (
       winningCalculations.length > 1 &&
       remove > 0 &&
@@ -909,13 +913,22 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
     ) {
       setClosestCalculations([...winningCalculations]);
     }
-
-    console.log(winningCalculations);
   }, [closestNumber]);
 
+  console.log(finalCalculations);
   console.log(closestCalculations);
 
-  return <></>;
+  return (
+    <>
+      {closestCalculations.length === 1
+        ? finalCalculations.map((calculation, index) => (
+            <div key={index}>{calculation["message"]}</div>
+          ))
+        : closestCalculations.map((calculation, index) => (
+            <div key={index}>{calculation["message"]}</div>
+          ))}
+    </>
+  );
 }
 
 export default WinCalculation;
