@@ -876,20 +876,29 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
     const newMin = numberToGuess - (remove + 1);
     const newMax = numberToGuess + (add + 1);
 
-    if (winningCalculations.length === 1 && remove > add && newMax !== 999) {
+    if (
+      winningCalculations.length === 1 &&
+      closestCalculations.length === 1 &&
+      (remove > add || newMin === 100) &&
+      newMax <= 999
+    ) {
       setClosestNumber(newMax);
       setAdd((prev) => prev + 1);
       return;
     }
 
-    if (winningCalculations.length === 1 && newMin !== 101) {
+    if (
+      winningCalculations.length === 1 &&
+      closestCalculations.length === 1 &&
+      newMin >= 101
+    ) {
       setClosestNumber(newMin);
       setRemove((prev) => prev + 1);
       return;
     }
 
     if (
-      winningCalculations.length > 1 &&
+      (winningCalculations.length > 1 || closestCalculations.length > 1) &&
       remove > 0 &&
       add > 0 &&
       remove === add
@@ -901,7 +910,7 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
       remove === add + 1
     ) {
       setClosestCalculations([...winningCalculations]);
-      if (newMax !== 999) {
+      if (newMax <= 999) {
         setClosestNumber(newMax);
         setAdd((prev) => prev + 1);
       }
@@ -924,9 +933,13 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
         ? finalCalculations.map((calculation, index) => (
             <div key={index}>{calculation["message"]}</div>
           ))
-        : closestCalculations.map((calculation, index) => (
-            <div key={index}>{calculation["message"]}</div>
-          ))}
+        : closestCalculations.map((calculation, index) =>
+            calculation["message"] !== "" ? (
+              <div key={index}>{calculation["message"]}</div>
+            ) : (
+              ""
+            )
+          )}
     </>
   );
 }
