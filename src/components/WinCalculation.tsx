@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type WinCalculationProps = {
   numbers: number[];
@@ -904,12 +904,9 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
       remove === add
     ) {
       setClosestCalculations((prev) => [...prev, ...winningCalculations]);
-    } else if (
-      winningCalculations.length > 1 &&
-      remove > 0 &&
-      remove === add + 1
-    ) {
+    } else if (winningCalculations.length > 1 && remove === add + 1) {
       setClosestCalculations([...winningCalculations]);
+
       if (newMax <= 999) {
         setClosestNumber(newMax);
         setAdd((prev) => prev + 1);
