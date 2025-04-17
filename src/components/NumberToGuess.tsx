@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 type NumberToGuessProps = {
-  handleNumberToGuess: any;
+  handleNumberToGuess: (data: number) => void;
   numberToGuess: number;
 };
 

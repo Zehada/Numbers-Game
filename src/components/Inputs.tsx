@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type InputsProps = {
   numbersList: { id: number; number: number }[];
-  numbersLeft: any;
+  numbersLeft: (data: { id: number; number: number }[]) => void;
 };
 
 function Inputs({ numbersList, numbersLeft }: InputsProps) {
@@ -21,7 +21,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
   });
   const secondSelectedNumberAsNumber = secondSelectedNumber.number;
 
-  const [selectedSymbol, setSelectedSymbol] = useState("+");
+  const [selectedSymbol, setSelectedSymbol] = useState("");
 
   const [calculationResults, setCalculationResults] = useState([
     {
@@ -56,21 +56,13 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     });
   }, [calculationResults]);
 
-  function handleChangingNumber(
-    e: React.ChangeEvent<HTMLSelectElement>,
-    i: number
-  ) {
-    e.preventDefault();
-
-    const selectedValue = parseInt(e.target.value);
-
-    if (selectedValue !== 0) {
-      // Filtrer l'élément sélectionné de `sortedNumbers`
+  function handleChangingNumber(selectedId: number, i: number) {
+    if (selectedId !== 0) {
       const selectedNumber = numbersList.filter(
-        (entry) => entry.id === selectedValue
+        (entry) => entry.id === selectedId
       )[0];
       const filteredList = numbersList.filter(
-        (entry) => entry.id !== selectedValue
+        (entry) => entry.id !== selectedId
       );
 
       if (i === 1) {
@@ -92,7 +84,11 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
   let calculationNumber: number = 0;
 
   function calculation(symbol: string) {
-    if (selectedNumberAsNumber !== 0 && secondSelectedNumberAsNumber !== 0) {
+    if (
+      selectedNumberAsNumber !== 0 &&
+      secondSelectedNumberAsNumber !== 0 &&
+      selectedSymbol !== ""
+    ) {
       if (symbol === "+") {
         calculationNumber =
           selectedNumberAsNumber + secondSelectedNumberAsNumber;
@@ -114,8 +110,12 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
         setResultMessage("Result must be an integer");
         calculationNumber = 0;
       }
-    } else {
-      setResultMessage("Select numbers");
+    } else if (
+      selectedNumberAsNumber === 0 ||
+      secondSelectedNumberAsNumber === 0 ||
+      selectedSymbol === ""
+    ) {
+      setResultMessage("Select numbers and symbol");
       // calculationNumber = 0;
     }
 
@@ -134,9 +134,9 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
         },
       ]);
 
-      numbersLeft((previousList: { id: number; number: number }[]) =>
+      numbersLeft(
         [
-          ...previousList.filter(
+          ...numbersList.filter(
             (entry) =>
               entry.id !== selectedNumber.id &&
               entry.id !== secondSelectedNumber.id
@@ -165,6 +165,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
         id: 0,
         number: 0,
       });
+      setSelectedSymbol("");
     }
   }
 
@@ -210,9 +211,9 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
       previousResults.filter((entry) => entry !== calculationResults[i])
     );
 
-    numbersLeft((previousList: { id: number; number: number }[]) =>
+    numbersLeft(
       [
-        ...previousList.filter((entry) => entry.id !== resultId),
+        ...numbersList.filter((entry) => entry.id !== resultId),
         { id: number1Id, number: number1 },
         { id: number2Id, number: number2 },
       ].sort(function (a, b) {
@@ -221,31 +222,145 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     );
   }
 
+  function clearSelectedNumbers(
+    ref1: React.RefObject<HTMLDivElement>,
+    ref2: React.RefObject<HTMLDivElement>,
+    ref3: React.RefObject<HTMLDivElement>,
+    ref4: React.RefObject<HTMLButtonElement>
+  ) {
+    useEffect(() => {
+      /**
+       * Alert if clicked on outside of element
+       */
+      function handleClickOutside(event: MouseEvent) {
+        if (
+          ref1.current &&
+          !ref1.current.contains(event.target as Node) &&
+          ref2.current &&
+          !ref2.current.contains(event.target as Node) &&
+          ref3.current &&
+          !ref3.current.contains(event.target as Node) &&
+          ref4.current &&
+          !ref4.current.contains(event.target as Node)
+        ) {
+          setSelectedNumber({
+            id: 0,
+            number: 0,
+          });
+          setSecondSelectedNumber({
+            id: 0,
+            number: 0,
+          });
+          setSelectedSymbol("");
+
+          setListOption(numbersList);
+          setListOption2(numbersList);
+        }
+      }
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref1, ref2, ref3, ref4, numbersList]);
+  }
+
+  const ref1 = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
+  const ref3 = useRef<HTMLDivElement>(null);
+  const ref4 = useRef<HTMLButtonElement>(null);
+  clearSelectedNumbers(ref1, ref2, ref3, ref4);
+
+  useEffect(() => {
+    console.log("⚠️ numbersList changed:", numbersList);
+  }, [numbersList]);
+
   return (
     <>
-      <select defaultValue={0} onChange={(e) => handleChangingNumber(e, 1)}>
-        <option value={0}></option>
-        {listOption.map((entry) => (
-          <option value={entry.id} key={entry.id}>
-            {entry.number}
-          </option>
-        ))}
-      </select>
-      <select onChange={(e) => setSelectedSymbol(e.target.value)}>
-        <option value="+">+</option>
-        <option value="−">−</option>
-        <option value="×">×</option>
-        <option value="÷">÷</option>
-      </select>
-      <select defaultValue={0} onChange={(e) => handleChangingNumber(e, 2)}>
-        <option value={0}></option>
-        {listOption2.map((entry) => (
-          <option value={entry.id} key={entry.id}>
-            {entry.number}
-          </option>
-        ))}
-      </select>
-      <button onClick={handleCalculation}>=</button>
+      <div className="flex flex-col items-center gap-10">
+        <div className="flex gap-10 w-full flex-wrap sm:flex-nowrap">
+          <div
+            ref={ref1}
+            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40"
+          >
+            {listOption.map((entry) => (
+              <div
+                onClick={() => handleChangingNumber(entry.id, 1)}
+                key={entry.id}
+                className={`cursor-pointer border-1 border-transparent rounded-sm hover:border-gray-700  ${
+                  selectedNumber.id === entry.id ? "inset-shadow-sm/40 " : ""
+                }`}
+              >
+                {entry.number}
+              </div>
+            ))}
+          </div>
+          <div
+            ref={ref3}
+            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40"
+          >
+            <div
+              onClick={() => setSelectedSymbol("+")}
+              className={`cursor-pointer border-1 border-transparent rounded-sm hover:border-gray-700  ${
+                selectedSymbol === "+" ? "inset-shadow-sm/40 " : ""
+              }`}
+            >
+              +
+            </div>
+            <div
+              onClick={() => setSelectedSymbol("-")}
+              className={`cursor-pointer border-1 border-transparent rounded-sm hover:border-gray-700  ${
+                selectedSymbol === "-" ? "inset-shadow-sm/40 " : ""
+              }`}
+            >
+              −
+            </div>
+            <div
+              onClick={() => setSelectedSymbol("×")}
+              className={`cursor-pointer border-1 border-transparent rounded-sm hover:border-gray-700  ${
+                selectedSymbol === "×" ? "inset-shadow-sm/40 " : ""
+              }`}
+            >
+              ×
+            </div>
+            <div
+              onClick={() => setSelectedSymbol("÷")}
+              className={`cursor-pointer border-1 border-transparent rounded-sm hover:border-gray-700  ${
+                selectedSymbol === "÷" ? "inset-shadow-sm/40 " : ""
+              }`}
+            >
+              ÷
+            </div>
+          </div>
+
+          <div
+            ref={ref2}
+            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40"
+          >
+            {listOption2.map((entry) => (
+              <div
+                onClick={() => handleChangingNumber(entry.id, 2)}
+                key={entry.id}
+                className={`cursor-pointer border-1 border-transparent rounded-sm hover:border-gray-700  ${
+                  secondSelectedNumber.id === entry.id
+                    ? "inset-shadow-sm/40 "
+                    : ""
+                }`}
+              >
+                {entry.number}
+              </div>
+            ))}
+          </div>
+        </div>
+        <button
+          ref={ref4}
+          onClick={handleCalculation}
+          className="flex items-center max-h-10 border-1 border-transparent hover:border-gray-700"
+        >
+          =
+        </button>
+      </div>
       {resultMessage !== "" && <div>{resultMessage}</div>}
 
       {calculationResults.map((calculation, index) =>

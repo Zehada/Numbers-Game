@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 type NumbersToPlayWithProps = {
-  randomNumbers: any;
+  randomNumbers: (data: number[]) => void;
   numbers: number[];
 };
 

@@ -10,7 +10,9 @@ function App() {
   // const numbers = [6, 45, 2, 6, 63, 10];
   const [numbers, setNumbers] = useState<number[]>([]);
 
-  const [numbersList, setNumbersList] = useState([{ id: 0, number: 0 }]);
+  const [numbersList, setNumbersList] = useState<
+    { id: number; number: number }[]
+  >([]);
 
   const [numberToGuess, setNumberToGuess] = useState(0);
 
@@ -34,15 +36,15 @@ function App() {
     );
   }, [numbers]);
 
-  function handleNumberToGuess(data: number) {
+  function handleNumberToGuess(data: number): void {
     setNumberToGuess(data);
   }
 
-  function handleNumbers(data: number[]) {
+  function handleNumbers(data: number[]): void {
     setNumbers(data);
   }
 
-  function handleNumbersLeft(data: { id: number; number: number }[]) {
+  function handleNumbersLeft(data: { id: number; number: number }[]): void {
     setNumbersList(data);
   }
 
