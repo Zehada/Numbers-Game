@@ -5,6 +5,7 @@ import NumbersToPlayWith from "./components/NumbersToPlayWith";
 import NumberToGuess from "./components/NumberToGuess";
 import EndMessage from "./components/EndMessage";
 import WinCalculation from "./components/WinCalculation";
+import StartButton from "./components/StartButton";
 
 function App() {
   // const numbers = [6, 45, 2, 6, 63, 10];
@@ -25,6 +26,8 @@ function App() {
   //     })
   //     .map((number, index) => ({ id: index + 1, number: number }))
   // );
+
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     setNumbersList(
@@ -48,20 +51,30 @@ function App() {
     setNumbersList(data);
   }
 
+  function handleStart(data: boolean): void {
+    setStarted(data);
+  }
+
   return (
     <>
-      <NumbersToPlayWith randomNumbers={handleNumbers} numbers={numbers} />
+      {started ? (
+        <main>
+          <NumbersToPlayWith randomNumbers={handleNumbers} numbers={numbers} />
 
-      <Inputs numbersList={numbersList} numbersLeft={handleNumbersLeft} />
+          <Inputs numbersList={numbersList} numbersLeft={handleNumbersLeft} />
 
-      <NumberToGuess
-        handleNumberToGuess={handleNumberToGuess}
-        numberToGuess={numberToGuess}
-      />
+          <NumberToGuess
+            handleNumberToGuess={handleNumberToGuess}
+            numberToGuess={numberToGuess}
+          />
 
-      <WinCalculation numbers={numbers} numberToGuess={numberToGuess} />
+          <WinCalculation numbers={numbers} numberToGuess={numberToGuess} />
 
-      <EndMessage numbersList={numbersList} numberToGuess={numberToGuess} />
+          <EndMessage numbersList={numbersList} numberToGuess={numberToGuess} />
+        </main>
+      ) : (
+        <StartButton start={handleStart} started={started} />
+      )}
     </>
   );
 }

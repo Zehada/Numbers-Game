@@ -26,9 +26,16 @@ function NumbersToPlayWith({ randomNumbers, numbers }: NumbersToPlayWithProps) {
 
   return (
     <>
-      {numbers.map((number, index) => (
-        <div key={index}>{number}</div>
-      ))}
+      <div>
+        {numbers.map((number, index) => (
+          <div
+            key={index}
+            className="transition-bottom transition-opacity duration 700"
+          >
+            {number}
+          </div>
+        ))}
+      </div>
     </>
   );
 }
