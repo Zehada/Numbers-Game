@@ -2,10 +2,9 @@ import { useState } from "react";
 
 type StartButtonProps = {
   start: (data: boolean) => void;
-  started: boolean;
 };
 
-function StartButton({ start, started }: StartButtonProps) {
+function StartButton({ start }: StartButtonProps) {
   const [visible, setVisible] = useState(true);
 
   const handleClick = () => {
@@ -16,23 +15,23 @@ function StartButton({ start, started }: StartButtonProps) {
   };
 
   return (
-    <>
+    <div className="h-full relative">
       <div
-        className={`relative transition-all duration-800 ease-in-out translate-y-[-50%]
-            ${visible ? "top-[40%] opacity-100" : "top-[15%] opacity-0"}
+        className={`absolute transition-all duration-800 ease-in-out left-[50%] translate-x-[-50%]
+            ${visible ? "top-[35%] opacity-100" : "top-[15%] opacity-0"}
           `}
       >
-        Find the number or get as close as possible
+        Find the number or get as close as possible with the given numbers
       </div>
       <button
         onClick={handleClick}
-        className={`relative transition-all duration-800 ease-in-out translate-y-[-50%]
-            ${visible ? "top-[50%] opacity-100" : "top-[85%] opacity-0"}
+        className={`absolute transition-all duration-800 ease-in-out lg:translate-y-[-50%] left-[50%] translate-x-[-50%] top-[85%]
+            ${visible ? "lg:top-[50%] opacity-100" : "lg:top-[85%] opacity-0"}
           `}
       >
         Start
       </button>
-    </>
+    </div>
   );
 }
 

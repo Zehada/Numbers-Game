@@ -14,13 +14,11 @@ function EndMessage({ numbersList, numberToGuess }: EndMessageProps) {
         numberToGuess != 0 &&
         numbersList[parseInt(numberInList)]["number"] === numberToGuess
       ) {
-        ("hello");
         setWin(1);
       }
     }
   }, [numbersList]);
 
-  console.log(win);
   return (
     <>
       <div>{win === 1 ? "you win" : "you lose"}</div>

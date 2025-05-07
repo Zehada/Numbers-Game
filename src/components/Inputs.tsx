@@ -103,7 +103,12 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
           selectedNumberAsNumber / secondSelectedNumberAsNumber;
       }
 
+      console.log(calculationNumber);
+
       if (calculationNumber <= 0) {
+        console.log(selectedNumberAsNumber);
+        console.log(secondSelectedNumberAsNumber);
+
         setResultMessage("Result must be a positive number");
         calculationNumber = 0;
       } else if (!Number.isInteger(calculationNumber)) {
@@ -272,17 +277,15 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
   const ref4 = useRef<HTMLButtonElement>(null);
   clearSelectedNumbers(ref1, ref2, ref3, ref4);
 
-  useEffect(() => {
-    console.log("⚠️ numbersList changed:", numbersList);
-  }, [numbersList]);
+  useEffect(() => {}, [numbersList]);
 
   return (
     <>
       <div className="flex flex-col items-center gap-10">
-        <div className="flex gap-10 w-full flex-wrap sm:flex-nowrap">
+        <div className="flex justify-center gap-10 w-full flex-wrap sm:flex-nowrap max-w-150">
           <div
             ref={ref1}
-            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40"
+            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40 max-w-75"
           >
             {listOption.map((entry) => (
               <div
@@ -298,7 +301,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
           </div>
           <div
             ref={ref3}
-            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40"
+            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40 max-w-75"
           >
             <div
               onClick={() => setSelectedSymbol("+")}
@@ -309,9 +312,9 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
               +
             </div>
             <div
-              onClick={() => setSelectedSymbol("-")}
+              onClick={() => setSelectedSymbol("−")}
               className={`cursor-pointer border-1 border-transparent rounded-sm hover:border-gray-700  ${
-                selectedSymbol === "-" ? "inset-shadow-sm/40 " : ""
+                selectedSymbol === "−" ? "inset-shadow-sm/40 " : ""
               }`}
             >
               −
@@ -336,7 +339,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
 
           <div
             ref={ref2}
-            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40"
+            className="flex flex-col justify-center min-h-48 rounded-lg w-full p-2.5 inset-shadow-sm/40 max-w-75"
           >
             {listOption2.map((entry) => (
               <div

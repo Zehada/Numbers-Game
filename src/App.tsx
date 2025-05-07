@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Inputs from "./components/Inputs";
 import NumbersToPlayWith from "./components/NumbersToPlayWith";
@@ -28,6 +28,10 @@ function App() {
   // );
 
   const [started, setStarted] = useState(false);
+  const [numbersDropped, setNumbersDropped] = useState(false);
+  const [numberToGuessDone, setNumberToGuessDone] = useState(false);
+  const [numbersTransitionDone, setNumbersTransitionDone] = useState(false);
+  const [bodyIsTransitionReady, setBodyIsTransitionReady] = useState(false);
 
   useEffect(() => {
     setNumbersList(
@@ -55,25 +59,92 @@ function App() {
     setStarted(data);
   }
 
+  useEffect(() => {
+    if (started) {
+      const timeoutId = setTimeout(() => {
+        setNumbersDropped(true);
+      }, 4200);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [started]);
+
+  useEffect(() => {
+    if (numbersDropped) {
+      const timeoutId = setTimeout(() => {
+        setNumberToGuessDone(true);
+      }, 2820);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [numbersDropped]);
+
+  useEffect(() => {
+    if (numberToGuessDone) {
+      const timeoutId = setTimeout(() => {
+        setNumbersTransitionDone(true);
+      }, 700);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [numberToGuessDone]);
+
+  useEffect(() => {
+    if (numbersTransitionDone) {
+      const timeoutId = setTimeout(() => {
+        setBodyIsTransitionReady(true);
+      }, 50);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [numbersTransitionDone]);
+
   return (
     <>
       {started ? (
-        <main>
-          <NumbersToPlayWith randomNumbers={handleNumbers} numbers={numbers} />
+        <main
+          className={`flex flex-col transition-all duration-700 ease-in-out ${
+            !bodyIsTransitionReady ? "justify-between" : ""
+          } ${!numberToGuessDone ? "h-[calc(50%+5.5rem)]" : "h-full"}`}
+        >
+          <div
+            className={`flex justify-center items-end mb-4 transition-all duration-700 ease-in-out ${
+              numberToGuessDone
+                ? "h-[7.5rem] xxs:h-[2.5rem] xs:h-[3.5rem]"
+                : "h-1/2"
+            }`}
+          >
+            <NumbersToPlayWith
+              randomNumbers={handleNumbers}
+              numbers={numbers}
+              started={started}
+              numbersDropped={numbersDropped}
+            />
+          </div>
+          <div
+            className={`transition-opacity duration-700 ease-in-out ${
+              numbersTransitionDone ? "block" : "hidden"
+            } ${bodyIsTransitionReady ? "opacity-100 grow" : "opacity-0"}`}
+          >
+            <Inputs numbersList={numbersList} numbersLeft={handleNumbersLeft} />
+          </div>
+          {/* <WinCalculation numbers={numbers} numberToGuess={numberToGuess} />
 
-          <Inputs numbersList={numbersList} numbersLeft={handleNumbersLeft} />
+              <EndMessage
+                numbersList={numbersList}
+                numberToGuess={numberToGuess}
+              /> */}
 
-          <NumberToGuess
-            handleNumberToGuess={handleNumberToGuess}
-            numberToGuess={numberToGuess}
-          />
-
-          <WinCalculation numbers={numbers} numberToGuess={numberToGuess} />
-
-          <EndMessage numbersList={numbersList} numberToGuess={numberToGuess} />
+          <div className={`${numbersDropped ? "opacity-100" : "opacity-0"}`}>
+            <NumberToGuess
+              numbersDropped={numbersDropped}
+              handleNumberToGuess={handleNumberToGuess}
+              numberToGuess={numberToGuess}
+            />
+          </div>
         </main>
       ) : (
-        <StartButton start={handleStart} started={started} />
+        <StartButton start={handleStart} />
       )}
     </>
   );

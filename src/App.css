@@ -4,8 +4,15 @@
 #root {
   height: 100vh;
   max-width: 1280px;
-  min-width: 40rem;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+
+@theme {
+  --breakpoint-xs: 440px;
+  --breakpoint-xxs: 376px;
+
 }
