@@ -35,33 +35,60 @@ function NumberToGuess({
 
   const counterSpans = [counterRef1, counterRef2, counterRef3];
 
-  let cancelled = false;
+  // let cancelled = false;
 
-  const sleep = (milliseconds: number) => {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
-  };
+  // const sleep = (milliseconds: number) => {
+  //   return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  // };
 
-  const defilement = async () => {
-    while (!cancelled) {
-      for (const digit of counterNumbers) {
-        if (cancelled) return;
-        await sleep(20);
-        for (let i = 0; i < activeDigits; i++) {
-          const span = counterSpans[i].current;
-          if (span) {
-            span.innerText = digit;
-          }
-        }
-      }
-    }
-  };
+  // const defilement = async () => {
+  //   while (!cancelled) {
+  //     for (const digit of counterNumbers) {
+  //       if (cancelled) return;
+  //       await sleep(20);
+  //       for (let i = 0; i < activeDigits; i++) {
+  //         const span = counterSpans[i].current;
+  //         if (span) {
+  //           span.innerText = digit;
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
+
+  const animationFrameId = useRef<number>();
 
   useEffect(() => {
-    if (numbersDropped) {
-      defilement();
+    let counterNumber = 0;
+
+    function counterAnimation(timestamp: number) {
+      if (counterNumber === 10) {
+        counterNumber = 0;
+      }
+      const counterNumberAsString = counterNumber.toString();
+
+      for (let i = 0; i < activeDigits; i++) {
+        const span = counterSpans[i].current;
+        if (span) {
+          span.innerText = counterNumberAsString;
+        }
+      }
+
+      counterNumber++;
+      if (activeDigits > 0) {
+        animationFrameId.current = requestAnimationFrame(counterAnimation);
+      }
+      return counterNumber;
     }
+
+    if (numbersDropped) {
+      animationFrameId.current = requestAnimationFrame(counterAnimation);
+    }
+
     return () => {
-      cancelled = true;
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
     };
   }, [numbersDropped, activeDigits]);
 
@@ -76,9 +103,6 @@ function NumberToGuess({
       const timeouts = [
         setTimeout(() => {
           setActiveDigits(2);
-          if (counterRef3.current) {
-            counterRef3.current.innerText = arrayNumber[2];
-          }
         }, 700),
         setTimeout(() => {
           if (counterRef3.current) {
