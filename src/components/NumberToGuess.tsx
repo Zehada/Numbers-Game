@@ -21,8 +21,6 @@ function NumberToGuess({
     handleNumberToGuess(randomNumber);
   }, []);
 
-  console.log(numberToGuess);
-
   const [arrayNumber, setArrayNumber] = useState([""]);
 
   const counterRef1 = useRef<HTMLSpanElement>(null);
@@ -99,7 +97,6 @@ function NumberToGuess({
 
   useEffect(() => {
     if (numbersDropped) {
-      console.log(arrayNumber);
       const timeouts = [
         setTimeout(() => {
           setActiveDigits(2);
@@ -138,9 +135,16 @@ function NumberToGuess({
           id="counter"
           className="flex justify-center items-center text-lg font-bold rounded-lg w-[3.5rem] h-[3.5rem] bg-gray-800"
         >
-          <span ref={counterRef1}></span>
-          <span ref={counterRef2}></span>
-          <span ref={counterRef3}></span>
+          {/* Replace end number just to be sure */}
+          {activeDigits === 0 ? (
+            numberToGuess
+          ) : (
+            <div>
+              <span ref={counterRef1}></span>
+              <span ref={counterRef2}></span>
+              <span ref={counterRef3}></span>
+            </div>
+          )}
         </div>
       </div>
     </>

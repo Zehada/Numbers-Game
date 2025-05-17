@@ -93,7 +93,7 @@ function App() {
     if (numbersTransitionDone) {
       const timeoutId = setTimeout(() => {
         setBodyIsTransitionReady(true);
-      }, 50);
+      }, 20);
 
       return () => clearTimeout(timeoutId);
     }

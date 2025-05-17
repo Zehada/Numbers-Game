@@ -103,12 +103,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
           selectedNumberAsNumber / secondSelectedNumberAsNumber;
       }
 
-      console.log(calculationNumber);
-
       if (calculationNumber <= 0) {
-        console.log(selectedNumberAsNumber);
-        console.log(secondSelectedNumberAsNumber);
-
         setResultMessage("Result must be a positive number");
         calculationNumber = 0;
       } else if (!Number.isInteger(calculationNumber)) {
@@ -174,58 +169,109 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
     }
   }
 
+  type CalculationToDelete = {
+    number1: number;
+    number1Id: number;
+    number2: number;
+    number2Id: number;
+    resultId: number;
+  };
+
+  const [calculationsToDelete, setCalculationsToDelete] = useState<
+    CalculationToDelete[]
+  >([]);
+
+  const [deleteRound, setDeleteRound] = useState<number>(0);
+
   function handleDelete(
-    i: number,
     number1: number,
     number1Id: number,
     number2: number,
     number2Id: number,
     resultId: number
   ) {
-    calculationResults.map((calculation, index) => {
-      if (
-        resultId === calculation.number1Id ||
-        resultId === calculation.number2Id
-      ) {
-        setCalculationResults((previousResults) =>
-          previousResults.filter((entry) => entry !== calculation)
-        );
+    setCalculationsToDelete((prev) => [
+      ...prev,
+      {
+        number1: number1,
+        number1Id: number1Id,
+        number2: number2,
+        number2Id: number2Id,
+        resultId: resultId,
+      },
+    ]);
+  }
 
-        document.getElementById("deleteBtn" + index)!.click();
+  useEffect(() => {
+    if (calculationsToDelete.length === 0) return;
+    // if (deleteRound >= calculationsToDelete.length) return;
+    const calculationToDelete = calculationsToDelete[deleteRound];
 
-        // numbersLeft((previousList: { id: number; number: number }[]) =>
-        //   previousList.filter((entry) => entry.id !== calculation.resultId)
-        // );
+    const dependent = calculationResults.filter(
+      (calc) =>
+        calc.number1Id === calculationToDelete.resultId ||
+        calc.number2Id === calculationToDelete.resultId
+    );
 
-        // if (resultId === calculation.number1Id) {
-        //   numbersLeft((previousList: { id: number; number: number }[]) => [
-        //     ...previousList,
-        //     { id: calculation.number2Id, number: calculation.number2 },
-        //   ]);
-        // } else if (resultId === calculation.number2Id) {
-        //   numbersLeft((previousList: { id: number; number: number }[]) => [
-        //     ...previousList,
-        //     ,
-        //     { id: calculation.number1Id, number: calculation.number1 },
-        //   ]);
-        // }
-      }
-    });
+    const dependentNumber1 = calculationsToDelete.filter(
+      (calc) => calc.resultId === calculationToDelete.number1Id
+    );
+
+    const dependentNumber2 = calculationsToDelete.filter(
+      (calc) => calc.resultId === calculationToDelete.number2Id
+    );
+
+    const newDelete = dependent.map((calc) => ({
+      number1: calc.number1,
+      number1Id: calc.number1Id,
+      number2: calc.number2,
+      number2Id: calc.number2Id,
+      resultId: calc.resultId,
+    }));
 
     setCalculationResults((previousResults) =>
-      previousResults.filter((entry) => entry !== calculationResults[i])
+      previousResults.filter(
+        (entry) => entry.resultId !== calculationToDelete.resultId
+      )
     );
 
     numbersLeft(
       [
-        ...numbersList.filter((entry) => entry.id !== resultId),
-        { id: number1Id, number: number1 },
-        { id: number2Id, number: number2 },
+        ...numbersList.filter(
+          (entry) => entry.id !== calculationToDelete.resultId
+        ),
+        ...(dependentNumber1.length === 0
+          ? [
+              {
+                id: calculationToDelete.number1Id,
+                number: calculationToDelete.number1,
+              },
+            ]
+          : []),
+        ...(dependentNumber2.length === 0
+          ? [
+              {
+                id: calculationToDelete.number2Id,
+                number: calculationToDelete.number2,
+              },
+            ]
+          : []),
       ].sort(function (a, b) {
         return a.number - b.number;
       })
     );
-  }
+
+    console.log(deleteRound);
+    console.log(calculationsToDelete);
+
+    if (dependent.length === 0) {
+      setCalculationsToDelete([]);
+      setDeleteRound(0);
+    } else {
+      setCalculationsToDelete((prev) => [...prev, ...newDelete]);
+      setDeleteRound((prev) => prev + 1);
+    }
+  }, [calculationsToDelete, deleteRound]);
 
   function clearSelectedNumbers(
     ref1: React.RefObject<HTMLDivElement>,
@@ -374,10 +420,8 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
               {calculation.result}
             </div>
             <button
-              id={"deleteBtn" + index}
               onClick={() =>
                 handleDelete(
-                  index,
                   calculation.number1,
                   calculation.number1Id,
                   calculation.number2,

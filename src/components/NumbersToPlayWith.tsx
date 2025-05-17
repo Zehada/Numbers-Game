@@ -40,7 +40,7 @@ function NumbersToPlayWith({
             updated[index] = true; // on active juste l'index voulu
             return updated;
           });
-        }, index * 700)
+        }, 20 + index * 700)
       );
 
       return () => {
