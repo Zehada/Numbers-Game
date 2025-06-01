@@ -6,6 +6,7 @@ import NumberToGuess from "./components/NumberToGuess";
 import EndMessage from "./components/EndMessage";
 import WinCalculation from "./components/WinCalculation";
 import StartButton from "./components/StartButton";
+import Timer from "./components/Timer";
 
 function App() {
   // const numbers = [6, 45, 2, 6, 63, 10];
@@ -32,6 +33,7 @@ function App() {
   const [numberToGuessDone, setNumberToGuessDone] = useState(false);
   const [numbersTransitionDone, setNumbersTransitionDone] = useState(false);
   const [bodyIsTransitionReady, setBodyIsTransitionReady] = useState(false);
+  const [gameIsReady, setGameIsReady] = useState(false);
 
   useEffect(() => {
     setNumbersList(
@@ -99,11 +101,26 @@ function App() {
     }
   }, [numbersTransitionDone]);
 
+  useEffect(() => {
+    if (bodyIsTransitionReady) {
+      const timeoutId = setTimeout(() => {
+        setGameIsReady(true);
+      }, 700);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [bodyIsTransitionReady]);
+
   return (
     <>
+      <div
+        className={`-z-1 opacity-5 fixed ${gameIsReady ? "block" : "hidden"}`}
+      >
+        <Timer gameIsReady={gameIsReady} />
+      </div>
       {started ? (
         <main
-          className={`flex flex-col transition-all duration-700 ease-in-out ${
+          className={`w-2/3 flex flex-col transition-all duration-700 ease-in-out ${
             !bodyIsTransitionReady ? "justify-between" : ""
           } ${!numberToGuessDone ? "h-[calc(50%+5.5rem)]" : "h-full"}`}
         >
@@ -144,7 +161,9 @@ function App() {
           </div>
         </main>
       ) : (
-        <StartButton start={handleStart} />
+        <div className="w-full h-screen">
+          <StartButton start={handleStart} />
+        </div>
       )}
     </>
   );

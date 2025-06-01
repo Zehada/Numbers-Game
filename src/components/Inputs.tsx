@@ -204,7 +204,7 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
 
   useEffect(() => {
     if (calculationsToDelete.length === 0) return;
-    // if (deleteRound >= calculationsToDelete.length) return;
+
     const calculationToDelete = calculationsToDelete[deleteRound];
 
     const dependent = calculationResults.filter(
@@ -411,32 +411,34 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
         </button>
       </div>
       {resultMessage !== "" && <div>{resultMessage}</div>}
-
-      {calculationResults.map((calculation, index) =>
-        index != 0 ? (
-          <div key={index}>
-            <div>
-              {calculation.number1} {calculation.symbol} {calculation.number2} ={" "}
-              {calculation.result}
+      <div className="flex flex-col items-center gap-2 mt-2 mb-10">
+        {calculationResults.map((calculation, index) =>
+          index != 0 ? (
+            <div className="flex gap-2" key={index}>
+              <div>
+                {calculation.number1} {calculation.symbol} {calculation.number2}{" "}
+                = {calculation.result}
+              </div>
+              <button
+                className="delete-btn"
+                onClick={() =>
+                  handleDelete(
+                    calculation.number1,
+                    calculation.number1Id,
+                    calculation.number2,
+                    calculation.number2Id,
+                    calculation.resultId
+                  )
+                }
+              >
+                X
+              </button>
             </div>
-            <button
-              onClick={() =>
-                handleDelete(
-                  calculation.number1,
-                  calculation.number1Id,
-                  calculation.number2,
-                  calculation.number2Id,
-                  calculation.resultId
-                )
-              }
-            >
-              x
-            </button>
-          </div>
-        ) : (
-          ""
-        )
-      )}
+          ) : (
+            ""
+          )
+        )}
+      </div>
     </>
   );
 }
