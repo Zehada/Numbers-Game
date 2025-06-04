@@ -25,7 +25,7 @@ function StartButton({ start }: StartButtonProps) {
       </div>
       <button
         onClick={handleClick}
-        className={`absolute transition-all duration-800 ease-in-out lg:translate-y-[-50%] left-[50%] translate-x-[-50%] top-[85%]
+        className={`absolute border-1 border-transparent hover:border-gray-700 transition-[top,opacity] duration-800 ease-in-out lg:translate-y-[-50%] left-[50%] translate-x-[-50%] top-[85%]
             ${visible ? "lg:top-[50%] opacity-100" : "lg:top-[85%] opacity-0"}
           `}
       >

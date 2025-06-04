@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from "react";
 type InputsProps = {
   numbersList: { id: number; number: number }[];
   numbersLeft: (data: { id: number; number: number }[]) => void;
+  gameHasEnded: boolean;
 };
 
-function Inputs({ numbersList, numbersLeft }: InputsProps) {
+function Inputs({ numbersList, numbersLeft, gameHasEnded }: InputsProps) {
   const [listOption, setListOption] = useState(numbersList);
   const [listOption2, setListOption2] = useState(numbersList);
 
@@ -260,9 +261,6 @@ function Inputs({ numbersList, numbersLeft }: InputsProps) {
         return a.number - b.number;
       })
     );
-
-    console.log(deleteRound);
-    console.log(calculationsToDelete);
 
     if (dependent.length === 0) {
       setCalculationsToDelete([]);

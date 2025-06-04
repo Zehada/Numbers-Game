@@ -45,6 +45,30 @@ function App() {
     );
   }, [numbers]);
 
+  const [gameHasEnded, setGameHasEnded] = useState(false);
+  const [timerHasEnded, setTimerHasEnded] = useState(false);
+
+  const [closestNumberUp, setClosestNumberUp] = useState<number>();
+  const [closestNumberDown, setClosestNumberDown] = useState<number>();
+
+  const [gameStatus, setGameStatus] = useState("playing");
+
+  useEffect(() => {
+    numbersList.map((number) => {
+      if (
+        (number.number === numberToGuess ||
+          number.number === closestNumberUp ||
+          number.number === closestNumberDown) &&
+        timerHasEnded === false
+      ) {
+        setGameHasEnded(true);
+        setGameStatus("won");
+      } else if (timerHasEnded === true) {
+        setGameStatus("lost");
+      }
+    });
+  }, [numbersList, timerHasEnded]);
+
   function handleNumberToGuess(data: number): void {
     setNumberToGuess(data);
   }
@@ -59,6 +83,17 @@ function App() {
 
   function handleStart(data: boolean): void {
     setStarted(data);
+  }
+
+  function handleClosestNumberUp(data: number): void {
+    setClosestNumberUp(data);
+  }
+  function handleClosestNumberDown(data: number): void {
+    setClosestNumberDown(data);
+  }
+
+  function handleTimerEnd(data: boolean): void {
+    setTimerHasEnded(data);
   }
 
   useEffect(() => {
@@ -116,7 +151,11 @@ function App() {
       <div
         className={`-z-1 opacity-5 fixed ${gameIsReady ? "block" : "hidden"}`}
       >
-        <Timer gameIsReady={gameIsReady} />
+        <Timer
+          gameIsReady={gameIsReady}
+          handleTimerEnd={handleTimerEnd}
+          gameHasEnded={gameHasEnded}
+        />
       </div>
       {started ? (
         <main
@@ -143,14 +182,24 @@ function App() {
               numbersTransitionDone ? "block" : "hidden"
             } ${bodyIsTransitionReady ? "opacity-100 grow" : "opacity-0"}`}
           >
-            <Inputs numbersList={numbersList} numbersLeft={handleNumbersLeft} />
+            <Inputs
+              numbersList={numbersList}
+              numbersLeft={handleNumbersLeft}
+              gameHasEnded={gameHasEnded}
+            />
           </div>
-          {/* <WinCalculation numbers={numbers} numberToGuess={numberToGuess} />
+          <WinCalculation
+            numbers={numbers}
+            numberToGuess={numberToGuess}
+            handleClosestNumberUp={handleClosestNumberUp}
+            handleClosestNumberDown={handleClosestNumberDown}
+          />
 
-              <EndMessage
-                numbersList={numbersList}
-                numberToGuess={numberToGuess}
-              /> */}
+          {gameStatus !== "playing" ? (
+            <EndMessage gameStatus={gameStatus} />
+          ) : (
+            ""
+          )}
 
           <div className={`${numbersDropped ? "opacity-100" : "opacity-0"}`}>
             <NumberToGuess

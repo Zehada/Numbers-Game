@@ -3,9 +3,16 @@ import { useEffect, useRef, useState } from "react";
 type WinCalculationProps = {
   numbers: number[];
   numberToGuess: number;
+  handleClosestNumberUp: (data: number) => void;
+  handleClosestNumberDown: (data: number) => void;
 };
 
-function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
+function WinCalculation({
+  numbers,
+  numberToGuess,
+  handleClosestNumberUp,
+  handleClosestNumberDown,
+}: WinCalculationProps) {
   const [closestNumber, setClosestNumber] = useState(0);
 
   useEffect(() => {
@@ -898,14 +905,17 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
     }
 
     if (
-      (winningCalculations.length > 1 || closestCalculations.length > 1) &&
+      winningCalculations.length > 1 &&
+      //  || closestCalculations.length > 1
       remove > 0 &&
       add > 0 &&
       remove === add
     ) {
       setClosestCalculations((prev) => [...prev, ...winningCalculations]);
+      handleClosestNumberUp(closestNumber);
     } else if (winningCalculations.length > 1 && remove === add + 1) {
       setClosestCalculations([...winningCalculations]);
+      handleClosestNumberDown(closestNumber);
 
       if (newMax <= 999) {
         setClosestNumber(newMax);
@@ -918,15 +928,17 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
       // && (remove < add || remove > add)
     ) {
       setClosestCalculations([...winningCalculations]);
+      if (remove > add) {
+        handleClosestNumberDown(closestNumber);
+      } else if (add > remove) {
+        handleClosestNumberUp(closestNumber);
+      }
     }
   }, [closestNumber]);
 
-  console.log(finalCalculations);
-  console.log(closestCalculations);
-
   return (
     <>
-      {closestCalculations.length === 1
+      {/* {closestCalculations.length === 1
         ? finalCalculations.map((calculation, index) => (
             <div key={index}>{calculation["message"]}</div>
           ))
@@ -936,7 +948,7 @@ function WinCalculation({ numbers, numberToGuess }: WinCalculationProps) {
             ) : (
               ""
             )
-          )}
+          )} */}
     </>
   );
 }

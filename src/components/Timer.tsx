@@ -2,14 +2,16 @@ import { useEffect, useRef, useState } from "react";
 
 type TimerProps = {
   gameIsReady: boolean;
+  handleTimerEnd: (data: boolean) => void;
+  gameHasEnded: boolean;
 };
 
-function Timer({ gameIsReady }: TimerProps) {
+function Timer({ gameIsReady, handleTimerEnd, gameHasEnded }: TimerProps) {
   const timerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (gameIsReady && timerRef.current !== null) {
-      let timeLeft = 60;
+      let timeLeft = 10;
       const intervalId = setInterval(() => {
         if (timerRef.current !== null) {
           timeLeft--;
@@ -17,14 +19,15 @@ function Timer({ gameIsReady }: TimerProps) {
             timeLeft < 10 ? "0" : ""
           }${timeLeft.toString()}`;
         }
-        if (timeLeft === 0) {
+        if (timeLeft === 0 || gameHasEnded) {
+          handleTimerEnd(true);
           clearInterval(intervalId);
         }
       }, 1000);
 
       return () => clearInterval(intervalId);
     }
-  }, [gameIsReady]);
+  }, [gameIsReady, gameHasEnded]);
 
   return (
     <>
