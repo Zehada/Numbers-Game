@@ -9,18 +9,27 @@ type TimerProps = {
 function Timer({ gameIsReady, handleTimerEnd, gameHasEnded }: TimerProps) {
   const timerRef = useRef<HTMLDivElement>(null);
 
+  const [lastTimerState, setLastTimerState] = useState<number>(0);
+
   useEffect(() => {
     if (gameIsReady && timerRef.current !== null) {
       let timeLeft = 10;
       const intervalId = setInterval(() => {
-        if (timerRef.current !== null) {
+        if (timerRef.current !== null && !gameHasEnded) {
           timeLeft--;
+          setLastTimerState(timeLeft);
           timerRef.current.innerText = `00:${
             timeLeft < 10 ? "0" : ""
           }${timeLeft.toString()}`;
         }
-        if (timeLeft === 0 || gameHasEnded) {
+        if (timeLeft === 0) {
           handleTimerEnd(true);
+          clearInterval(intervalId);
+        } else if (gameHasEnded && timerRef.current !== null) {
+          timerRef.current.innerText = `00:${
+            lastTimerState < 10 ? "0" : ""
+          }${lastTimerState.toString()}`;
+
           clearInterval(intervalId);
         }
       }, 1000);

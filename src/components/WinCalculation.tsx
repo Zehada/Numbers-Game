@@ -936,6 +936,9 @@ function WinCalculation({
     }
   }, [closestNumber]);
 
+  console.log(finalCalculations);
+  console.log(closestCalculations);
+
   return (
     <>
       {/* {closestCalculations.length === 1
