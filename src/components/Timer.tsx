@@ -13,7 +13,7 @@ function Timer({ gameIsReady, handleTimerEnd, gameHasEnded }: TimerProps) {
 
   useEffect(() => {
     if (gameIsReady && timerRef.current !== null) {
-      let timeLeft = 10;
+      let timeLeft = 60;
       const intervalId = setInterval(() => {
         if (timerRef.current !== null && !gameHasEnded) {
           timeLeft--;

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 type WinCalculationProps = {
   numbers: number[];
@@ -936,22 +936,50 @@ function WinCalculation({
     }
   }, [closestNumber]);
 
-  console.log(finalCalculations);
-  console.log(closestCalculations);
-
   return (
     <>
-      {/* {closestCalculations.length === 1
-        ? finalCalculations.map((calculation, index) => (
-            <div key={index}>{calculation["message"]}</div>
-          ))
-        : closestCalculations.map((calculation, index) =>
-            calculation["message"] !== "" ? (
-              <div key={index}>{calculation["message"]}</div>
-            ) : (
-              ""
-            )
-          )} */}
+      <div className="w-full flex justify-center mb-5">
+        <div className="flex flex-col justify-start items-center p-4 h-48 rounded-lg w-full inset-shadow-sm/40 max-w-75 overflow-auto space-y-6 bg-zinc-700">
+          {closestCalculations.length === 1
+            ? finalCalculations.map((calculation, index) => {
+                if (!calculation.message || calculation.message.trim() === "")
+                  return null;
+                const parts = calculation.message.split(", ");
+                return (
+                  <div key={index} className="flex flex-col items-start">
+                    {parts.map((part, i) => (
+                      <div key={i}>
+                        {i === parts.length - 1 ? (
+                          <strong>{part}</strong>
+                        ) : (
+                          part
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })
+            : closestCalculations.map((calculation, index) => {
+                if (!calculation.message || calculation.message.trim() === "")
+                  return null;
+                if (calculation.message === "") return null;
+                const parts = calculation.message.split(", ");
+                return (
+                  <div key={index} className="flex flex-col items-start">
+                    {parts.map((part, i) => (
+                      <div key={i}>
+                        {i === parts.length - 1 ? (
+                          <strong>{part}</strong>
+                        ) : (
+                          part
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+        </div>
+      </div>
     </>
   );
 }

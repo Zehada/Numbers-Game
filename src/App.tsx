@@ -188,12 +188,16 @@ function App() {
               gameHasEnded={gameHasEnded}
             />
           </div>
-          <WinCalculation
-            numbers={numbers}
-            numberToGuess={numberToGuess}
-            handleClosestNumberUp={handleClosestNumberUp}
-            handleClosestNumberDown={handleClosestNumberDown}
-          />
+          {gameStatus !== "playing" ? (
+            <WinCalculation
+              numbers={numbers}
+              numberToGuess={numberToGuess}
+              handleClosestNumberUp={handleClosestNumberUp}
+              handleClosestNumberDown={handleClosestNumberDown}
+            />
+          ) : (
+            ""
+          )}
 
           {gameStatus !== "playing" ? (
             <EndMessage gameStatus={gameStatus} />
